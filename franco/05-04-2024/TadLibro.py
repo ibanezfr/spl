@@ -48,10 +48,10 @@ def modPre(libro,p):
     #Modifica el precio de un libro
     libro[3] = p
 
-# def asignarLib(libro1,libro2):
-#     #Asigna datos de un libro en otro
-#     libro2[0] = libro1[0]
-#     libro2[1] = libro1[1]
-#     libro2[2] = libro1[2]
-#     libro2[3] = libro1[3]
+def asignarLib(libro1,libro2):
+    #Asigna datos de un libro en otro
+    libro2[0] = libro1[0]
+    libro2[1] = libro1[1]
+    libro2[2] = libro1[2]
+    libro2[3] = libro1[3]
 
