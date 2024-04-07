@@ -1,7 +1,8 @@
-# Tad Libro
-# Autor: Franco Ibañez
-# Fecha: 7 de abril de 2024
-
+'''
+Tad Libro
+Autor: Franco Ibañez
+Fecha: 7 de abril de 2024
+'''
 
 def crearLib():
     #Crea un libro vacío
