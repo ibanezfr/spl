@@ -51,8 +51,8 @@ def modPre(libro,p):
 
 def asignarLib(libro1,libro2):
     #Asigna datos de un libro en otro
-    libro2[0] = libro1[0]
-    libro2[1] = libro1[1]
-    libro2[2] = libro1[2]
-    libro2[3] = libro1[3]
+    modNom(libro1, verNom(libro2))
+    modEdit(libro1, verEdit(libro2))
+    modAutor(libro1, verAutor(libro2))
+    modPre(libro1, verPre(libro2))
 
