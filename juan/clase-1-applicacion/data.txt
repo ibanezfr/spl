@@ -1,0 +1,8 @@
+libro1
+editorial1
+autor1
+12.3
+libro2
+editorial2
+autor2
+30.2
