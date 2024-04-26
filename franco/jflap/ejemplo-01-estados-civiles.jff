@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--Created with JFLAP 7.1.--><structure>
+	<type>fa</type>
+	<automaton>
+		<!--The list of states.-->
+		<state id="0" name="Soltero">
+			<x>65.0</x>
+			<y>34.0</y>
+			<initial/>
+		</state>
+		<state id="1" name="Casado">
+			<x>230.0</x>
+			<y>18.0</y>
+		</state>
+		<state id="2" name="Divorciado">
+			<x>102.0</x>
+			<y>114.0</y>
+		</state>
+		<state id="3" name="Viudo">
+			<x>264.0</x>
+			<y>158.0</y>
+		</state>
+		<!--The list of transitions.-->
+		<transition>
+			<from>3</from>
+			<to>1</to>
+			<controlx>200</controlx>
+			<controly>135</controly>
+			<read>Casamiento</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>1</to>
+			<controlx>152</controlx>
+			<controly>-19</controly>
+			<read>Casamiento</read>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>2</to>
+			<controlx>146</controlx>
+			<controly>33</controly>
+			<read>Divorcio</read>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>3</to>
+			<controlx>327</controlx>
+			<controly>73</controly>
+			<read>Muerte</read>
+		</transition>
+		<transition>
+			<from>2</from>
+			<to>1</to>
+			<controlx>191</controlx>
+			<controly>105</controly>
+			<read>Casamiento</read>
+		</transition>
+	</automaton>
+</structure>
