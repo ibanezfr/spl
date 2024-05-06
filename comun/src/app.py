@@ -1,10 +1,10 @@
-import tadTarea, tadListado, tadCola, datetime
-from tadTarea import *
-from tadListado import *
-from tadCola import *
-from datetime import date
-
 """
+Archivo:        /comun/src/app.py
+Fecha:          5 de mayo de 2024
+Modificación:   
+Autores:        Piazza J., Ibañez F., Lucas M.
+
+
 Spec Menu:
     - Agregar Tarea
     - Modificar Tarea
@@ -14,7 +14,15 @@ Spec Menu:
     - Reporte de tareas agrupadas por estado
     - Eliminar todas las tareas asignadas a un empleado especifico
     - Mostrar cola de tareas del mes
+
 """
+
+import tadTarea, tadListado, tadCola, datetime
+from tadTarea import *
+from tadListado import *
+from tadCola import *
+from datetime import date
+
 
 def imprimirTarea(tarea):
     print(f'Nombre: {verNombre(tarea)}')
