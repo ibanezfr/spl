@@ -14,15 +14,104 @@ Spec Menu:
     - Reporte de tareas agrupadas por estado
     - Eliminar todas las tareas asignadas a un empleado especifico
     - Mostrar cola de tareas del mes
-
+    
+    Preguntas:
+    Cortar las fechas? Fecha mínima?
 """
 
-import tadTarea, tadListado, tadCola, datetime
+import tadTarea, tadListado, tadCola, datetime, os, sys
 from tadTarea import *
 from tadListado import *
 from tadCola import *
 from datetime import date
+from os import system, name
 
+def main():
+    listadoTareas = crearListado()
+
+
+    imprimir_menu()
+    while True:
+        try:
+            eleccion = int(input("\n\tIngrese su opción > "))
+        except ValueError:
+            print("Valor incorrecto, vuelva a intentar")
+            continue
+
+        match eleccion:
+           case 1:
+                opcionAgregarTarea(listadoTareas)
+           case 2:
+                opcionModificarTarea(listadoTareas)
+           case 3:
+                opcionMostrarListadoCompleto()
+           case 4:
+                opcionActualizarPorLote()
+           case 5:
+                opcionReporteTareasPorEstado()
+           case 6:
+                opcionEliminarTareasEmpleado()
+           case 7:
+                opcionImprimirTareasDelMes()
+           case 0:
+                print("\nCerrando programa...")
+                sys.exit()
+           case _:
+                print("Valor incorrecto, vuelva a intentar")
+                continue
+
+        imprimir_menu()
+        
+
+def imprimir_menu():
+    clear()
+    print("\tGrupo 01 - Sintaxis y Semántica del Lenguaje - 2024")
+    print("\n\n\t\t\t*** Tienda Soft ***") 
+    print("\n\t1. Agregar Tarea")
+    print("\t2. Modificar Tarea")
+    print("\t3. Mostrar Listado Completo")
+    print("\t4. Actualizar Fechas de Vencimiento Por Lote")
+    print("\t5. Reporte de Tareas Agrupadas por Estado")
+    print("\t6. Eliminar Tareas de un Empleado")
+    print("\t7. Imprimir Lista de Tareas del Mes")
+
+
+def clear():
+    if name == 'nt':
+        _ = system('cls')
+    else:
+        _ = system('clear')
+
+def opcionAgregarTarea(listadoTareas):
+   
+    while True:
+        tarea = inputTarea()
+        imprimirTarea(tarea)
+        cod=input("¿Los datos son correctos? Y/n > ")
+        if cod == "n":
+            continue
+        break
+
+    agregarTarea(listadoTareas, tarea)
+
+    if len(listaEmpleados) == 0:
+        listaEmpleados.append(verAsignado(tarea))
+ 
+
+def opcionModificarTarea():
+
+def opcionMostrarListadoCompleto():
+
+def opcionActualizarPorLote():
+
+def opcionReporteTareasPorEstado():
+
+def opcionEliminarTareasEmpleado():
+
+def opcionImprimirTareasDelMes():
+
+
+    
 
 def imprimirTarea(tarea):
     print(f'Nombre: {verNombre(tarea)}')
@@ -92,11 +181,11 @@ def seleccionarFecha():
 
 def inputTarea():
     tarea = crearTarea()
-    nombre = input("Ingrese el nombre de la tarea: ")
+    nombre = input("\n\tIngrese el nombre de la tarea: ")
     descripcion = input("Ingrese la descripcion de la tarea: ")
     if len(listaEmpleados) == 0:
         asignado = input("Ingrese el nombre del empleado a quien se le asignara esta tarea: ")
-        listaEmpleados.append(asignado)
+        #listaEmpleados.append(asignado)
     else:
         asignado = seleccionarEmpleado()
     estado = seleccionarEstado()
@@ -106,3 +195,6 @@ def inputTarea():
         #Encolar
     return tarea
 
+
+if __name__ == '__main__':
+    main()

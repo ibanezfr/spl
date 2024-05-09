@@ -15,7 +15,7 @@ def agregarTarea(listado, t):
             listado (Listado): Listado al cual agregarle la tarea
             t (Tarea): Tarea a ser agregada
     """
-    listado.append(tarea)
+    listado.append(t)
 
 def eliminarTarea(listado, t):
     """Elimina una tarea del listado de tareas
