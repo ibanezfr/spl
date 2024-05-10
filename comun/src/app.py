@@ -97,10 +97,7 @@ def clear():
         _ = system('clear')
 
 def opcionAgregarTarea(listadoTareas):
-   
-    clear()
-    imprimir_banner()
-
+    
     while True:
         clear()
         imprimir_banner()
