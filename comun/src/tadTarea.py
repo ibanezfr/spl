@@ -69,8 +69,9 @@ def modVencimiento(tarea, vencimiento):
 
 def asignarTarea(tareaDestino, tareaFuente):
     """Asigna el valor de la tarea fuente a la tarea destino"""
-    tareaDestino[0] = tareaFuente[0]
-    tareaDestino[1] = tareaFuente[1]
-    tareaDestino[2] = tareaFuente[2]
-    tareaDestino[3] = tareaFuente[3]
-    tareaDestino[4] = tareaFuente[4]
+    modNombre(tareaDestino, verNombre(tareaFuente))
+    modDescripcion(tareaDestino, verDescripcion(tareaFuente))
+    modAsignado(tareaDestino, verAsignado(tareaFuente))
+    modEstado(tareaDestino, verAsignado(tareaFuente))
+    modVencimiento(tareaDestino, verVencimiento(tareaFuente))
+
