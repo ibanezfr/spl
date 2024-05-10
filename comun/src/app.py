@@ -87,7 +87,7 @@ def main():
 
 def imprimir_banner():
     print("\tGrupo 01 - Sintaxis y Semántica del Lenguaje - 2024")
-    print(f"\n\n\t\t\t{BB}*** TIENDA SOFT ***{R}") 
+    print(f"\t\t\t{BB}*** TIENDA SOFT ***{R}") 
 
 
 def imprimir_menu():
@@ -168,6 +168,8 @@ def opcionMostrarListadoCompleto(listadoTareas):
         input(ERROR_EMPTY_STRING)
     else:
         for i in range(0, totTareas, tareasEnPantalla):
+            clear()
+            imprimir_banner()
             for j in range(tareasEnPantalla):
                 tareaActual = i + j
                 if tareaActual < totTareas:
@@ -227,21 +229,19 @@ def imprimirTareasFiltrado(listadoTareas, totTareas, tareasEnPantalla, estado):
                     imprimirTarea(recuperarTarea(listadoTareas, i + j))
                     ctr = ctr + 1
         restantes = totTareas - (i + tareasEnPantalla)
-        if restantes > 0:
-            input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
-        #else:
-        #    input(f"\n\t{AM}Enter para terminar...{R}")
+        #if restantes > 0:
+            #input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
     return ctr
 
 
 #TODO
 def opcionEliminarTareasEmpleado():
-    print(f"\n\t{RO}Funcion no implementada <WIP>{R}")
+    print(f"\n\t{RO}Función no implementada <WIP>{R}")
     input(CONTINUE_STRING)
 
 #TODO
 def opcionImprimirTareasDelMes():
-    print(f"\n\t{RO}Funcion no implementada <WIP>{R}")
+    print(f"\n\t{RO}Función no implementada <WIP>{R}")
     input(CONTINUE_STRING)
 
 def imprimirTarea(tarea):
