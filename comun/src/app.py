@@ -27,6 +27,9 @@ from tadCola import *
 from datetime import date
 from os import system, name
 
+import testdata
+from testdata import *
+
 RO = "\033[91m"
 VE = "\033[92m"
 AM = "\033[93m"
@@ -71,11 +74,13 @@ def main():
            case 5:
                 opcionActualizarPorLote(listadoTareas)
            case 6:
-                opcionReporteTareasPorEstado2(listadoTareas)
+                opcionReporteTareasPorEstado(listadoTareas)
            case 7:
                 opcionEliminarTareasEmpleado()
            case 8:
                 opcionImprimirTareasDelMes()
+           case 9:
+                opcionCargarDatos(listadoTareas, listadoEmpleados)
            case 0:
                 print(f"\n{AM}Cerrando...{R}\n")
                 sys.exit()
@@ -87,7 +92,7 @@ def main():
         imprimir_banner()
         imprimir_menu()
         
-
+### Funciones auxiliares para menu ###
 def imprimir_banner():
     print("\tGrupo 01 - Sintaxis y Semántica del Lenguaje - 2024")
     print(f"\t\t\t{BB}*** TIENDA SOFT ***{R}") 
@@ -109,6 +114,8 @@ def clear():
         _ = system('cls')
     else:
         _ = system('clear')
+
+### Funciones del menu ###
 
 def opcionAgregarTarea(listadoTareas, listadoEmpleados):
 
@@ -222,6 +229,19 @@ def opcionReporteTareasPorEstado(listadoTareas):
     imprimirSeccion(listadoProgreso, 3, "En Progreso")
     imprimirSeccion(listadoCompleto, 3, "Completada")
 
+#TODO
+def opcionEliminarTareasEmpleado():
+    print(f"\n\t{RO}Función no implementada <WIP>{R}")
+    input(CONTINUE_STRING)
+
+#TODO
+def opcionImprimirTareasDelMes():
+    print(f"\n\t{RO}Función no implementada <WIP>{R}")
+    input(CONTINUE_STRING)
+
+def opcionCargarDatos(listaTareas, listadoEmpleados):
+    cargarDatos(listaTareas, listadoEmpleados)
+
 def imprimirSeccion(listado, tareasEnPantalla, estado):
     totTareas = tamanio(listado)
     for i in range(0, totTareas, tareasEnPantalla):
@@ -239,16 +259,6 @@ def imprimirSeccion(listado, tareasEnPantalla, estado):
         else:
             input(CONTINUE_STRING_2)
 
-#TODO
-def opcionEliminarTareasEmpleado():
-    print(f"\n\t{RO}Función no implementada <WIP>{R}")
-    input(CONTINUE_STRING)
-
-#TODO
-def opcionImprimirTareasDelMes():
-    print(f"\n\t{RO}Función no implementada <WIP>{R}")
-    input(CONTINUE_STRING)
-
 def imprimirTarea(tarea):
     print(f'\n\t{BB}Nombre:{R} \t\t{verNombre(tarea)}')
     print(f'\t{BB}Descripcion:{R} \t\t{verDescripcion(tarea)}')
@@ -257,6 +267,22 @@ def imprimirTarea(tarea):
     f = date.fromisoformat(verVencimiento(tarea))
     print(f'\t{BB}Fecha de vencimiento:{R} \t{f.day}-{f.month}-{f.year}')
 
+def inputTarea(listadoEmpleados):
+    tarea = crearTarea()
+    nombre = input("\n\n\tIngrese el nombre de la tarea \n\t> ")
+    descripcion = input("\n\tIngrese la descripción de la tarea \n\t> ")
+    if tamanio(listadoEmpleados) == 0:
+        asignado = input("\n\tIngrese el nombre del empleado\n\ta quien se le asignará esta tarea \n\t> ")
+    else:
+        asignado = seleccionarEmpleado(listadoEmpleados)
+    estado = seleccionarEstado()
+    vencimiento = seleccionarFecha()
+    cargarTarea(tarea, nombre, descripcion, asignado, estado, vencimiento)
+    #if estado == "En Progreso":
+        #Encolar
+    return tarea
+
+### Funciones auxiliares ###
 def seleccionarTarea(listadoTareas):
     tarea = crearTarea()
     for i in range(tamanio(listadoTareas)):
@@ -334,22 +360,6 @@ def seleccionarFecha():
             continue
         break
     return fecha.isoformat()
-
-def inputTarea(listadoEmpleados):
-    tarea = crearTarea()
-    nombre = input("\n\n\tIngrese el nombre de la tarea \n\t> ")
-    descripcion = input("\n\tIngrese la descripción de la tarea \n\t> ")
-    if tamanio(listadoEmpleados) == 0:
-        asignado = input("\n\tIngrese el nombre del empleado\n\ta quien se le asignará esta tarea \n\t> ")
-    else:
-        asignado = seleccionarEmpleado(listadoEmpleados)
-    estado = seleccionarEstado()
-    vencimiento = seleccionarFecha()
-    cargarTarea(tarea, nombre, descripcion, asignado, estado, vencimiento)
-    #if estado == "En Progreso":
-        #Encolar
-    return tarea
-
 
 if __name__ == '__main__':
     main()
