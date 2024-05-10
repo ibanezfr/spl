@@ -99,16 +99,22 @@ def opcionAgregarTarea(listadoTareas):
  
 
 def opcionModificarTarea():
+    print("Hola")
 
 def opcionMostrarListadoCompleto():
+    print("Hola")
 
 def opcionActualizarPorLote():
+    print("Hola")
 
 def opcionReporteTareasPorEstado():
+    print("Hola")
 
 def opcionEliminarTareasEmpleado():
+    print("Hola")
 
 def opcionImprimirTareasDelMes():
+    print("Hola")
 
 
     
