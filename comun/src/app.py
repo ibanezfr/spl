@@ -19,9 +19,10 @@ Spec Menu:
     Cortar las fechas? Fecha mínima?
 """
 
-import tadTarea, tadListado, tadCola, datetime, os, sys
+import tadTarea, tadListado, tadEmpleados, tadCola, datetime, os, sys
 from tadTarea import *
 from tadListado import *
+from tadEmpleados import *
 from tadCola import *
 from datetime import date
 from os import system, name
@@ -115,8 +116,8 @@ def opcionAgregarTarea(listadoTareas, listadoEmpleados):
 
     agregarTarea(listadoTareas, tarea)
 
-    if len(listaEmpleados) == 0:
-       agregarEmpleado(listadoEmpleados, (verAsignado(tarea))
+    if tamanio(listadoEmpleados) == 0:
+       agregarEmpleado(listadoEmpleados, verAsignado(tarea))
  
 
 def opcionModificarTarea(listadoTareas, listadoEmpleados):
@@ -166,21 +167,58 @@ def opcionMostrarListadoCompleto(listadoTareas):
                 input(f"\n\t{AM}(Restan {restantes} tareas, Enter para continuar...{R}")
             else:
                 input(f"\n\t{AM}Enter para terminar...{R}")
-
+                      
+#TODO
 def opcionActualizarPorLote():
-    print("Hola")
+    print("Fecha inical:")
+    fechaInicial = seleccionarFecha()
+    print("Fecha final:")
+    fechaFinal = seleccionarFecha()
+    print("Fecha nueva:")
+    fechaNueva = seleccionarFecha()
 
 def opcionReporteTareasPorEstado(listadoTareas):
-    cantTareas = range(tamanio(listadoTareas))
-    for i in cantTareas:
-        print("****************")
-        imprimirTarea(recuperarTarea(listadoTareas, i))
+    estados = ["Pendiente", "En Progreso", "Completada"]
+    totTareas = tamanio(listadoTareas)
+    tareasEnPantalla = 3
 
-    input()
+    if totTareas == 0:
+        input(f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}");
+    else:
+        for i in estados:
+            print(f"\n\tSección: {i}")
+            print(f"\t{AZ}********************{R}")
+            ctr = imprimirTareasFiltrado(listadoTareas, totTareas,
+                                         tareasEnPantalla, i)
+            if ctr == 0:
+                print(f"\n\tNo hay Tareas en estado {AM}{i}{R}")
+        input(f"\n\t{AM}Enter para terminar...{R}")
+        
 
+def imprimirTareasFiltrado(listadoTareas, totTareas, tareasEnPantalla, estado):
+    ctr = 0
+    #input(f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}");
+    for i in range(0, totTareas, tareasEnPantalla):
+        for j in range(tareasEnPantalla):
+            tareaActual = i + j
+            if tareaActual < totTareas:
+                rta = recuperarTarea(listadoTareas, i + j)
+                if verEstado(rta) == estado:
+                    imprimirTarea(recuperarTarea(listadoTareas, i + j))
+                    ctr = ctr + 1
+        restantes = totTareas - (i + tareasEnPantalla)
+        if restantes > 0:
+            input(f"\n\t{AM}(Restan {restantes} tareas, Enter para continuar...{R}")
+        #else:
+        #    input(f"\n\t{AM}Enter para terminar...{R}")
+    return ctr
+
+
+#TODO
 def opcionEliminarTareasEmpleado():
     print("Hola")
 
+#TODO
 def opcionImprimirTareasDelMes():
     print("Hola")
 
@@ -191,7 +229,7 @@ def imprimirTarea(tarea):
     print(f'\t{BB}Estado:{R} \t\t{verEstado(tarea)}')
     print(f'\t{BB}Fecha de vencimiento:{R} \t{verVencimiento(tarea)}\n')
 
-def seleccionarEmpleado():
+def seleccionarEmpleado(listadoEmpleados):
     while True:
         print("\n\tIngrese el código correspondiente al empleado a asignar")
         for i in range(tamanio(listadoEmpleados)):
@@ -202,11 +240,11 @@ def seleccionarEmpleado():
         except ValueError:
             print(ERROR_STRING)
             continue
-        if codEmpleado < 0 or codEmpleado > tamanio(listaEmpleados):
+        if codEmpleado < 0 or codEmpleado > tamanio(listadoEmpleados):
             print(ERROR_STRING)
             continue
         break
-    if codEmpleado == tamanio(listaEmpleados):
+    if codEmpleado == tamanio(listadoEmpleados):
         asignado = input("\n\tIngrese el nombre del empleado a quien se le asignará esta tarea: > ")
         agregarEmpleado(listadoEmpleados, asignado)
     else:
@@ -237,7 +275,8 @@ def seleccionarEstado():
             return "Completada"
         case _:
             print(ERROR_STRING)
-            continue
+            #continue
+            #TODO SyntaxError: 'continue' not properly in loop
 
 def seleccionarFecha():
     while True:
@@ -252,11 +291,11 @@ def seleccionarFecha():
         break
     return strFecha
 
-def inputTarea():
+def inputTarea(listadoEmpleados):
     tarea = crearTarea()
     nombre = input("\n\n\tIngrese el nombre de la tarea \n\t> ")
     descripcion = input("\n\tIngrese la descripción de la tarea \n\t> ")
-    if tamanio(listaEmpleados) == 0:
+    if tamanio(listadoEmpleados) == 0:
         asignado = input("\n\tIngrese el nombre del empleado\n\ta quien se le asignará esta tarea \n\t> ")
     else:
         asignado = seleccionarEmpleado(listadoEmpleados)
