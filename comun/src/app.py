@@ -37,6 +37,7 @@ R = "\033[0m"
 ERROR_STRING = f"\n\t{RO}Valor incorrecto, vuelva a intentar{R}"
 ERROR_EMPTY_STRING = f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}"
 CONTINUE_STRING = f"\n\t{AM}Enter para terminar...{R}"
+CONTINUE_STRING_2 = f"\n\t{AM}Enter para continuar...{R}"
 
 def main():
     listadoTareas = crearListado()
@@ -209,28 +210,39 @@ def opcionReporteTareasPorEstado(listadoTareas):
         input(ERROR_EMPTY_STRING)
     else:
         for i in estados:
-            print(f"\n\tSección: {i}")
-            print(f"\t{AZ}********************{R}")
             ctr = imprimirTareasFiltrado(listadoTareas, totTareas,
                                          tareasEnPantalla, i)
             if ctr == 0:
-                print(f"\n\tNo hay Tareas en estado {AM}{i}{R}")
-        input(CONTINUE_STRING)
+                if i != "Completado":
+                     print(f"\n\tNo hay Tareas en estado {AM}{i}{R}")
+                     input(CONTINUE_STRING_2)
+                else:
+                     print(f"\n\tNo hay Tareas en estado {AM}{i}{R}")
+
+    #input(CONTINUE_STRING)
         
 
 def imprimirTareasFiltrado(listadoTareas, totTareas, tareasEnPantalla, estado):
     ctr = 0
+   
     for i in range(0, totTareas, tareasEnPantalla):
+        clear()
+        imprimir_banner()
+        print(f"\n\tSección: {estado}")
+        print(f"\t{AZ}********************{R}")
+
         for j in range(tareasEnPantalla):
             tareaActual = i + j
             if tareaActual < totTareas:
                 rta = recuperarTarea(listadoTareas, i + j)
-                if verEstado(rta) == estado:
+                valida = verEstado(rta) == estado
+                if valida:
                     imprimirTarea(recuperarTarea(listadoTareas, i + j))
                     ctr = ctr + 1
-        restantes = totTareas - (i + tareasEnPantalla)
-        #if restantes > 0:
-            #input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
+                else:
+                  continue
+        if ctr != 0:
+            input(CONTINUE_STRING_2)
     return ctr
 
 
@@ -250,7 +262,7 @@ def imprimirTarea(tarea):
     print(f'\t{BB}Empleado Asignado:{R} \t{verAsignado(tarea)}')
     print(f'\t{BB}Estado:{R} \t\t{verEstado(tarea)}')
     f = date.fromisoformat(verVencimiento(tarea))
-    print(f'\t{BB}Fecha de vencimiento:{R} \t{f.day}-{f.month}-{f.year}\n')
+    print(f'\t{BB}Fecha de vencimiento:{R} \t{f.day}-{f.month}-{f.year}')
 
 def seleccionarTarea(listadoTareas):
     tarea = crearTarea()
