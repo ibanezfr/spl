@@ -54,14 +54,16 @@ def main():
            case 2:
                 opcionModificarTarea(listadoTareas)
            case 3:
-                opcionMostrarListadoCompleto()
+                opcionEliminarTarea(listadoTareas)
            case 4:
-                opcionActualizarPorLote()
+                opcionMostrarListadoCompleto()
            case 5:
-                opcionReporteTareasPorEstado()
+                opcionActualizarPorLote()
            case 6:
-                opcionEliminarTareasEmpleado()
+                opcionReporteTareasPorEstado(listadoTareas)
            case 7:
+                opcionEliminarTareasEmpleado()
+           case 8:
                 opcionImprimirTareasDelMes()
            case 0:
                 print(f"\n{AM}Cerrando...{R}\n")
@@ -83,6 +85,7 @@ def imprimir_banner():
 def imprimir_menu():
     print(f"\n\t{BB}1{R}. Agregar Tarea")
     print(f"\n\t{BB}2{R}. Modificar Tarea")
+    print(f"\n\t{BB}3{R}. Eliminar Tarea")
     print(f"\n\t{BB}3{R}. Mostrar Listado Completo")
     print(f"\n\t{BB}4{R}. Actualizar Fechas de Vencimiento Por Lote")
     print(f"\n\t{BB}5{R}. Reporte de Tareas Agrupadas por Estado")
@@ -118,14 +121,23 @@ def opcionAgregarTarea(listadoTareas):
 def opcionModificarTarea(l):
     print("Hola")
 
+def opcionEliminarTarea():
+    print("Hola")
+
 def opcionMostrarListadoCompleto():
+    
     print("Hola")
 
 def opcionActualizarPorLote():
     print("Hola")
 
-def opcionReporteTareasPorEstado():
-    print("Hola")
+def opcionReporteTareasPorEstado(listadoTareas):
+   
+    cantTareas = range(tamanio(listadoTareas))
+    for i in cantTareas:
+        print("****************")
+        imprimirTarea(recuperarTarea(listadoTareas, i))
+    input()
 
 def opcionEliminarTareasEmpleado():
     print("Hola")
