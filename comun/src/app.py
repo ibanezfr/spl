@@ -26,16 +26,24 @@ from tadCola import *
 from datetime import date
 from os import system, name
 
-ERROR_STRING = "\tValor incorrecto, vuelva a intentar"
+RO = "\033[91m"
+VE = "\033[92m"
+AM = "\033[93m"
+AZ = "\033[94m"
+BB = "\033[1;37m"
+R = "\033[0m"
+
+ERROR_STRING = f"\n\t{RO}Valor incorrecto, vuelva a intentar{R}"
 
 def main():
     listadoTareas = crearListado()
 
-
+    clear()
+    imprimir_banner()
     imprimir_menu()
     while True:
         try:
-            eleccion = int(input("\n\tIngrese su opción > "))
+            eleccion = int(input(f"\n\tIngrese su opción {BB}>{R} "))
         except ValueError:
             print(ERROR_STRING)
             continue
@@ -56,27 +64,31 @@ def main():
            case 7:
                 opcionImprimirTareasDelMes()
            case 0:
-                print("\nCerrando programa...")
+                print(f"\n{AM}Cerrando programa...{R}\n")
                 sys.exit()
            case _:
                 print(ERROR_STRING)
                 continue
 
+        clear()
+        imprimir_banner()
         imprimir_menu()
         
 
-def imprimir_menu():
-    clear()
+def imprimir_banner():
     print("\tGrupo 01 - Sintaxis y Semántica del Lenguaje - 2024")
-    print("\n\n\t\t\t*** Tienda Soft ***") 
-    print("\n\t1. Agregar Tarea")
-    print("\t2. Modificar Tarea")
-    print("\t3. Mostrar Listado Completo")
-    print("\t4. Actualizar Fechas de Vencimiento Por Lote")
-    print("\t5. Reporte de Tareas Agrupadas por Estado")
-    print("\t6. Eliminar Tareas de un Empleado")
-    print("\t7. Imprimir Lista de Tareas del Mes")
+    print(f"\n\n\t\t\t{BB}*** TIENDA SOFT ***{R}") 
 
+
+def imprimir_menu():
+    print(f"\n\t{BB}1{R}. Agregar Tarea")
+    print(f"\n\t{BB}2{R}. Modificar Tarea")
+    print(f"\n\t{BB}3{R}. Mostrar Listado Completo")
+    print(f"\n\t{BB}4{R}. Actualizar Fechas de Vencimiento Por Lote")
+    print(f"\n\t{BB}5{R}. Reporte de Tareas Agrupadas por Estado")
+    print(f"\n\t{BB}6{R}. Eliminar Tareas de un Empleado")
+    print(f"\n\t{BB}7{R}. Imprimir Lista de Tareas del Mes")
+    print(f"\n\t{BB}0{R}. Cerrar Aplicación\n")
 
 def clear():
     if name == 'nt':
@@ -86,10 +98,13 @@ def clear():
 
 def opcionAgregarTarea(listadoTareas):
    
+    clear()
+    imprimir_banner()
+
     while True:
         tarea = inputTarea()
         imprimirTarea(tarea)
-        cod=input("¿Los datos son correctos? Y/n > ")
+        cod=input(f"\n\t{AM}¿Los datos son correctos? Y/n >{R} ")
         if cod == "n":
             continue
         break
@@ -100,7 +115,7 @@ def opcionAgregarTarea(listadoTareas):
         listaEmpleados.append(verAsignado(tarea))
  
 
-def opcionModificarTarea():
+def opcionModificarTarea(l):
     print("Hola")
 
 def opcionMostrarListadoCompleto():
@@ -122,22 +137,22 @@ def opcionImprimirTareasDelMes():
     
 
 def imprimirTarea(tarea):
-    print(f'\tNombre: {verNombre(tarea)}')
-    print(f'Descripcion: {verDescripcion(tarea)}')
-    print(f'Empleado Asignado: {verAsignado(tarea)}')
-    print(f'Estado: {verEstado(tarea)}')
-    print(f'Fecha de vencimiento: {verVencimiento(tarea)}')
+    print(f'\n\t{BB}Nombre:{R} \t\t{verNombre(tarea)}')
+    print(f'\t{BB}Descripcion:{R} \t\t{verDescripcion(tarea)}')
+    print(f'\t{BB}Empleado Asignado:{R} \t{verAsignado(tarea)}')
+    print(f'\t{BB}Estado:{R} \t\t{verEstado(tarea)}')
+    print(f'\t{BB}Fecha de vencimiento:{R} \t{verVencimiento(tarea)}\n')
 
 # TODO: extraer listaEmpleados a un TAD
 listaEmpleados = []
 def seleccionarEmpleado():
     while True:
-        print("Ingrese el codigo correspondiente al empleado a asignar:")
+        print("\n\tIngrese el código correspondiente al empleado a asignar")
         for i, e in enumerate(listaEmpleados):
-            print(f'{i}. {e}')
-        print(str(len(listaEmpleados)) + ". Nuevo empleado")
+            print(f'\n\t{i}. {e}')
+        print("\t" +  str(len(listaEmpleados)) + ". Nuevo empleado\n")
         try:
-            codEmpleado = int(input())
+            codEmpleado = int(input(f"\t {BB}>{R} "))
         except ValueError:
             print(ERROR_STRING)
             continue
@@ -146,7 +161,7 @@ def seleccionarEmpleado():
             continue
         break
     if codEmpleado == len(listaEmpleados):
-        asignado = input("Ingrese el nombre del empleado a quien se le asignara esta tarea: ")
+        asignado = input("\n\tIngrese el nombre del empleado a quien se le asignará esta tarea: > ")
         listaEmpleados.append(asignado)
     else:
         asignado = listaEmpleados[codEmpleado]
@@ -155,11 +170,11 @@ def seleccionarEmpleado():
 def seleccionarEstado():
     while True:
         try:
-            print("Elija el estado de la tarea:")
-            print("1. Pendiente")
-            print("2. En Progreso")
-            print("3. Completada")
-            codEstado = int(input())
+            print("\n\tElija el estado de la tarea:")
+            print(f"\t\t{BB}1{R}. Pendiente")
+            print(f"\t\t{BB}2{R}. En Progreso")
+            print(f"\t\t{BB}3{R}. Completada")
+            codEstado = int(input("\n\t\t> "))
         except ValueError:
             print(ERROR_STRING)
             continue
@@ -178,7 +193,7 @@ def seleccionarEstado():
 def seleccionarFecha():
     while True:
         try:
-            strFecha = input("Ingrese la fecha de vencimiento de la tarea (YYYY-MM-DD)")
+            strFecha = input("\n\tIngrese la fecha de vencimiento \n\tde la tarea (YYYY-MM-DD) > ")
             anio, mes, dia = map(int, strFecha.split('-'))
             fecha = datetime.date(anio, mes, dia)
         except ValueError:
@@ -189,10 +204,10 @@ def seleccionarFecha():
 
 def inputTarea():
     tarea = crearTarea()
-    nombre = input("\n\tIngrese el nombre de la tarea: ")
-    descripcion = input("Ingrese la descripcion de la tarea: ")
+    nombre = input("\n\n\tIngrese el nombre de la tarea \n\t> ")
+    descripcion = input("\n\tIngrese la descripción de la tarea \n\t> ")
     if len(listaEmpleados) == 0:
-        asignado = input("Ingrese el nombre del empleado a quien se le asignara esta tarea: ")
+        asignado = input("\n\tIngrese el nombre del empleado\n\t a quien se le asignará esta tarea \n\t> ")
         #listaEmpleados.append(asignado)
     else:
         asignado = seleccionarEmpleado()
