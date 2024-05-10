@@ -72,6 +72,6 @@ def asignarTarea(tareaDestino, tareaFuente):
     modNombre(tareaDestino, verNombre(tareaFuente))
     modDescripcion(tareaDestino, verDescripcion(tareaFuente))
     modAsignado(tareaDestino, verAsignado(tareaFuente))
-    modEstado(tareaDestino, verAsignado(tareaFuente))
+    modEstado(tareaDestino, verEstado(tareaFuente))
     modVencimiento(tareaDestino, verVencimiento(tareaFuente))
 
