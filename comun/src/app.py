@@ -64,7 +64,7 @@ def main():
            case 7:
                 opcionImprimirTareasDelMes()
            case 0:
-                print(f"\n{AM}Cerrando programa...{R}\n")
+                print(f"\n{AM}Cerrando...{R}\n")
                 sys.exit()
            case _:
                 print(ERROR_STRING)
@@ -86,8 +86,8 @@ def imprimir_menu():
     print(f"\n\t{BB}3{R}. Mostrar Listado Completo")
     print(f"\n\t{BB}4{R}. Actualizar Fechas de Vencimiento Por Lote")
     print(f"\n\t{BB}5{R}. Reporte de Tareas Agrupadas por Estado")
-    print(f"\n\t{BB}6{R}. Eliminar Tareas de un Empleado")
-    print(f"\n\t{BB}7{R}. Imprimir Lista de Tareas del Mes")
+    print(f"\n\t{BB}6{R}. Eliminar Tareas de un Empleado {AM}<WIP>{R}")
+    print(f"\n\t{BB}7{R}. Imprimir Lista de Tareas del Mes {AM}<WIP>{R}")
     print(f"\n\t{BB}0{R}. Cerrar Aplicación\n")
 
 def clear():
@@ -102,6 +102,9 @@ def opcionAgregarTarea(listadoTareas):
     imprimir_banner()
 
     while True:
+        clear()
+        imprimir_banner()
+
         tarea = inputTarea()
         imprimirTarea(tarea)
         cod=input(f"\n\t{AM}¿Los datos son correctos? Y/n >{R} ")
@@ -207,7 +210,7 @@ def inputTarea():
     nombre = input("\n\n\tIngrese el nombre de la tarea \n\t> ")
     descripcion = input("\n\tIngrese la descripción de la tarea \n\t> ")
     if len(listaEmpleados) == 0:
-        asignado = input("\n\tIngrese el nombre del empleado\n\t a quien se le asignará esta tarea \n\t> ")
+        asignado = input("\n\tIngrese el nombre del empleado\n\ta quien se le asignará esta tarea \n\t> ")
         #listaEmpleados.append(asignado)
     else:
         asignado = seleccionarEmpleado()
