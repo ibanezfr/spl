@@ -1,20 +1,21 @@
+""" Spec Menu:
+    - Agregar Tarea franco
+    - Modificar Tarea juan
+    - Eliminar Tarea juan
+    - Mostrar Listado Completo juan
+    - Modificar fecha de vecimiento (entre Fecha1 y Fecha2 -> cambia a FechaFinal) juan
+    - Reporte de tareas agrupadas por estado franco
+    - Eliminar todas las tareas asignadas a un empleado especifico franco
+    - Mostrar cola de tareas del mes franco
+"""
+
 import tadTarea, tadListado, tadCola, datetime
 from tadTarea import *
 from tadListado import *
 from tadCola import *
 from datetime import date
 
-"""
-Spec Menu:
-    - Agregar Tarea
-    - Modificar Tarea
-    - Eliminar Tarea
-    - Mostrar Listado Completo
-    - Modificar fecha de vecimiento (entre Fecha1 y Fecha2 -> cambia a FechaFinal)
-    - Reporte de tareas agrupadas por estado
-    - Eliminar todas las tareas asignadas a un empleado especifico
-    - Mostrar cola de tareas del mes
-"""
+ERROR_STRING = "Valor incorrecto, vuelva a intentar"
 
 def imprimirTarea(tarea):
     print(f'Nombre: {verNombre(tarea)}')
@@ -22,6 +23,27 @@ def imprimirTarea(tarea):
     print(f'Empleado Asignado: {verAsignado(tarea)}')
     print(f'Estado: {verEstado(tarea)}')
     print(f'Fecha de vencimiento: {verVencimiento(tarea)}')
+
+def seleccionarTarea(listadoTareas):
+    for i, e in enumerate(listadoTareas):
+        print(f'{i}. Nombre: {verNombre(e)}')
+    while True:
+        try:
+            cod = int(input("Ingrese el codigo de la tarea deseada: "))
+        except:
+            print(ERROR_STRING)
+            continue
+        if cod > tamanio(listado) or cod < 0:
+            print(ERROR_STRING)
+            continue
+        print("Tarea seleccionada:")
+        imprimirTarea(e)
+        r = input("Es esta la tarea deseada? Y/n")
+        if r == 'n':
+            continue
+        break
+    return e
+
 
 # TODO: extraer listaEmpleados a un TAD
 listaEmpleados = []
@@ -34,10 +56,10 @@ def seleccionarEmpleado():
         try:
             codEmpleado = int(input())
         except ValueError:
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
         if codEmpleado < 0 or codEmpleado > len(listaEmpleados):
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
         break
     if codEmpleado == len(listaEmpleados):
@@ -56,19 +78,18 @@ def seleccionarEstado():
             print("3. Completada")
             codEstado = int(input())
         except ValueError:
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
-        if codEstado < 1 or codEstado > 3:
-            print("Valor incorrecto, vuelva a intentar")
-            continue
-        break
-    match(codEstado):
-        case 1:
-            return "Pendiente"
-        case 2:
-            return "En progreso"
-        case 3:
-            return "Completada"
+        match codEstado:
+            case 1:
+                return "Pendiente"
+            case 2:
+                return "En progreso"
+            case 3:
+                return "Completada"
+            case _:
+                print(ERROR_STRING)
+                continue
 
 def seleccionarFecha():
     while True:
@@ -77,7 +98,7 @@ def seleccionarFecha():
             anio, mes, dia = map(int, strFecha.split('-'))
             fecha = datetime.date(anio, mes, dia)
         except ValueError:
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
         break
     return strFecha
@@ -97,4 +118,3 @@ def inputTarea():
     #if estado == "En progreso":
         #Encolar
     return tarea
-

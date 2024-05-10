@@ -26,6 +26,8 @@ from tadCola import *
 from datetime import date
 from os import system, name
 
+ERROR_STRING = "\tValor incorrecto, vuelva a intentar"
+
 def main():
     listadoTareas = crearListado()
 
@@ -35,7 +37,7 @@ def main():
         try:
             eleccion = int(input("\n\tIngrese su opción > "))
         except ValueError:
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
 
         match eleccion:
@@ -57,7 +59,7 @@ def main():
                 print("\nCerrando programa...")
                 sys.exit()
            case _:
-                print("Valor incorrecto, vuelva a intentar")
+                print(ERROR_STRING)
                 continue
 
         imprimir_menu()
@@ -120,7 +122,7 @@ def opcionImprimirTareasDelMes():
     
 
 def imprimirTarea(tarea):
-    print(f'Nombre: {verNombre(tarea)}')
+    print(f'\tNombre: {verNombre(tarea)}')
     print(f'Descripcion: {verDescripcion(tarea)}')
     print(f'Empleado Asignado: {verAsignado(tarea)}')
     print(f'Estado: {verEstado(tarea)}')
@@ -137,10 +139,10 @@ def seleccionarEmpleado():
         try:
             codEmpleado = int(input())
         except ValueError:
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
         if codEmpleado < 0 or codEmpleado > len(listaEmpleados):
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
         break
     if codEmpleado == len(listaEmpleados):
@@ -159,10 +161,10 @@ def seleccionarEstado():
             print("3. Completada")
             codEstado = int(input())
         except ValueError:
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
         if codEstado < 1 or codEstado > 3:
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
         break
     match(codEstado):
@@ -180,7 +182,7 @@ def seleccionarFecha():
             anio, mes, dia = map(int, strFecha.split('-'))
             fecha = datetime.date(anio, mes, dia)
         except ValueError:
-            print("Valor incorrecto, vuelva a intentar")
+            print(ERROR_STRING)
             continue
         break
     return strFecha
