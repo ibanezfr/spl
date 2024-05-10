@@ -56,7 +56,7 @@ def main():
            case 3:
                 opcionEliminarTarea(listadoTareas)
            case 4:
-                opcionMostrarListadoCompleto()
+                opcionMostrarListadoCompleto(listadoTareas)
            case 5:
                 opcionActualizarPorLote()
            case 6:
@@ -86,11 +86,11 @@ def imprimir_menu():
     print(f"\n\t{BB}1{R}. Agregar Tarea")
     print(f"\n\t{BB}2{R}. Modificar Tarea")
     print(f"\n\t{BB}3{R}. Eliminar Tarea")
-    print(f"\n\t{BB}3{R}. Mostrar Listado Completo")
-    print(f"\n\t{BB}4{R}. Actualizar Fechas de Vencimiento Por Lote")
-    print(f"\n\t{BB}5{R}. Reporte de Tareas Agrupadas por Estado")
-    print(f"\n\t{BB}6{R}. Eliminar Tareas de un Empleado {AM}<WIP>{R}")
-    print(f"\n\t{BB}7{R}. Imprimir Lista de Tareas del Mes {AM}<WIP>{R}")
+    print(f"\n\t{BB}4{R}. Mostrar Listado Completo")
+    print(f"\n\t{BB}5{R}. Actualizar Fechas de Vencimiento Por Lote")
+    print(f"\n\t{BB}6{R}. Reporte de Tareas Agrupadas por Estado")
+    print(f"\n\t{BB}7{R}. Eliminar Tareas de un Empleado {AM}<WIP>{R}")
+    print(f"\n\t{BB}8{R}. Imprimir Lista de Tareas del Mes {AM}<WIP>{R}")
     print(f"\n\t{BB}0{R}. Cerrar Aplicación\n")
 
 def clear():
@@ -100,7 +100,7 @@ def clear():
         _ = system('clear')
 
 def opcionAgregarTarea(listadoTareas):
-    
+       
     while True:
         clear()
         imprimir_banner()
@@ -124,19 +124,34 @@ def opcionModificarTarea(l):
 def opcionEliminarTarea():
     print("Hola")
 
-def opcionMostrarListadoCompleto():
-    
-    print("Hola")
+def opcionMostrarListadoCompleto(listadoTareas):
+
+    totTareas = tamanio(listadoTareas)
+    tareasEnPantalla = 3
+
+    if totTareas == 0:
+        input(f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}");
+    else:
+        for i in range(0, totTareas, tareasEnPantalla):
+            for j in range(tareasEnPantalla):
+                tareaActual = i + j
+                if tareaActual < totTareas:
+                    imprimirTarea(recuperarTarea(listadoTareas, i + j))
+            restantes = totTareas - (i + tareasEnPantalla)
+            if restantes > 0:
+                input(f"\n\t{AM}(Restan {restantes} tareas, Enter para continuar...{R}")
+            else:
+                input(f"\n\t{AM}Enter para terminar...{R}")
 
 def opcionActualizarPorLote():
     print("Hola")
 
 def opcionReporteTareasPorEstado(listadoTareas):
-   
     cantTareas = range(tamanio(listadoTareas))
     for i in cantTareas:
         print("****************")
         imprimirTarea(recuperarTarea(listadoTareas, i))
+
     input()
 
 def opcionEliminarTareasEmpleado():
