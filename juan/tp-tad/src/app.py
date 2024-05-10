@@ -143,13 +143,22 @@ def opcionMostrarListadoCompleto(listadoTareas):
         imprimirTarea(recuperarTarea(listadoTareas, i))
     input()
 
-def opcionActualizarPorLote():
+def opcionActualizarPorLote(listadoTareas):
     print("Fecha inical:")
-    fechaInicial = seleccionarFecha()
+    fechaInicial = date.fromisoformat(seleccionarFecha())
     print("Fecha final:")
-    fechaFinal = seleccionarFecha()
+    fechaFinal = date.fromisoformat(seleccionarFecha())
     print("Fecha nueva:")
     fechaNueva = seleccionarFecha()
+    mod = 0
+    for i in range(tamanio(listadoTareas)):
+        t = recuperarTarea(listadoTareas, i)
+        d = date.fromisoformat(verVencimiento(t))
+        if d >= fechaInicial and d <= fechaFinal:
+            modVencimiento(t, fechaNueva)
+            mod += 1
+    print(f'Se modificaron {mod} tareas')
+    input()
 
 def opcionReporteTareasPorEstado():
     print("Hola")
@@ -237,15 +246,14 @@ def seleccionarEstado():
 def seleccionarFecha():
     while True:
         try:
-            strFecha = input("Ingrese la fecha de vencimiento de la tarea (YYYY-MM-DD)")
-            #anio, mes, dia = map(int, strFecha.split('-'))
-            #fecha = datetime.date(anio, mes, dia)
-            fecha = date.fromisoformat(strFecha)
+            strFecha = input("Ingrese la fecha de vencimiento (DD-MM-AAAA)")
+            dia, mes, anio = map(int, strFecha.split('-'))
+            fecha = datetime.date(anio, mes, dia)
         except ValueError:
             print(ERROR_STRING)
             continue
         break
-    return strFecha
+    return fecha.isoformat()
 
 def inputTarea(listadoEmpleados):
     tarea = crearTarea()
