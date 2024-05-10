@@ -37,6 +37,7 @@ ERROR_STRING = f"\n\t{RO}Valor incorrecto, vuelva a intentar{R}"
 
 def main():
     listadoTareas = crearListado()
+    listadoEmpleados = crearEmpleados()
 
     clear()
     imprimir_banner()
@@ -50,15 +51,15 @@ def main():
 
         match eleccion:
            case 1:
-                opcionAgregarTarea(listadoTareas)
+                opcionAgregarTarea(listadoTareas, listadoEmpleados)
            case 2:
-                opcionModificarTarea(listadoTareas)
+                opcionModificarTarea(listadoTareas, listadoEmpleados)
            case 3:
                 opcionEliminarTarea(listadoTareas)
            case 4:
                 opcionMostrarListadoCompleto(listadoTareas)
            case 5:
-                opcionActualizarPorLote()
+                opcionActualizarPorLote(listadoTareas)
            case 6:
                 opcionReporteTareasPorEstado(listadoTareas)
            case 7:
@@ -99,30 +100,53 @@ def clear():
     else:
         _ = system('clear')
 
-def opcionAgregarTarea(listadoTareas):
+def opcionAgregarTarea(listadoTareas, listadoEmpleados):
        
     while True:
         clear()
         imprimir_banner()
 
-        tarea = inputTarea()
+        tarea = inputTarea(listadoEmpleados)
         imprimirTarea(tarea)
-        cod=input(f"\n\t{AM}¿Los datos son correctos? Y/n >{R} ")
-        if cod == "n":
+        r = input(f"\n\t{AM}¿Los datos son correctos? Y/n >{R} ")
+        if r == "n":
             continue
         break
 
     agregarTarea(listadoTareas, tarea)
 
     if len(listaEmpleados) == 0:
-        listaEmpleados.append(verAsignado(tarea))
+       agregarEmpleado(listadoEmpleados, (verAsignado(tarea))
  
 
-def opcionModificarTarea(l):
-    print("Hola")
+def opcionModificarTarea(listadoTareas, listadoEmpleados):
+    tarea = seleccionarTarea(listadoTareas)
+    tareaTemporal = crearTarea()
+    while True:
+        print("Ingrese los valores a modificar")
+        n = input(f'Nombre (actual: {verNombre(tarea)}): ')
+        d = input(f'Descripcion (actual: {verDescripcion(tarea)}): ')
+        print(f'Empleado asignado(actual: {verAsignado(tarea)}): ')
+        em = seleccionarEmpleado(listadoEmpleados)
+        print(f'Estado (actual: {verEstado(tarea)}): ')
+        es = seleccionarEstado()
+        print(f'Fecha de vencimiento (actual: {verVencimiento(tarea)}): ')
+        f = seleccionarFecha()
+        cargarTarea(tareaTemporal, n, d, em, es, f)
+        imprimirTarea(tareaTemporal)
+        r = input("¿Los datos son correctos? Y/n > ")
+        if r == "n":
+            continue
+        break
+    asignarTarea(tarea, tareaTemporal)
+
 
 def opcionEliminarTarea():
-    print("Hola")
+    if tamanio(listadoTareas) == 0:
+        input(f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}");
+        return
+    tarea = seleccionarTarea(listadoTareas)
+    eliminarTarea(listadoTareas, tarea)
 
 def opcionMostrarListadoCompleto(listadoTareas):
 
@@ -160,9 +184,6 @@ def opcionEliminarTareasEmpleado():
 def opcionImprimirTareasDelMes():
     print("Hola")
 
-
-    
-
 def imprimirTarea(tarea):
     print(f'\n\t{BB}Nombre:{R} \t\t{verNombre(tarea)}')
     print(f'\t{BB}Descripcion:{R} \t\t{verDescripcion(tarea)}')
@@ -170,28 +191,26 @@ def imprimirTarea(tarea):
     print(f'\t{BB}Estado:{R} \t\t{verEstado(tarea)}')
     print(f'\t{BB}Fecha de vencimiento:{R} \t{verVencimiento(tarea)}\n')
 
-# TODO: extraer listaEmpleados a un TAD
-listaEmpleados = []
 def seleccionarEmpleado():
     while True:
         print("\n\tIngrese el código correspondiente al empleado a asignar")
-        for i, e in enumerate(listaEmpleados):
-            print(f'\n\t{i}. {e}')
-        print("\t" +  str(len(listaEmpleados)) + ". Nuevo empleado\n")
+        for i in range(tamanio(listadoEmpleados)):
+            print(f'{i}. {recuperarEmpleado(listadoEmpleados, i)}')
+        print(str(tamanio(listadoEmpleados)) + ". Nuevo empleado")
         try:
             codEmpleado = int(input(f"\t {BB}>{R} "))
         except ValueError:
             print(ERROR_STRING)
             continue
-        if codEmpleado < 0 or codEmpleado > len(listaEmpleados):
+        if codEmpleado < 0 or codEmpleado > tamanio(listaEmpleados):
             print(ERROR_STRING)
             continue
         break
-    if codEmpleado == len(listaEmpleados):
+    if codEmpleado == tamanio(listaEmpleados):
         asignado = input("\n\tIngrese el nombre del empleado a quien se le asignará esta tarea: > ")
-        listaEmpleados.append(asignado)
+        agregarEmpleado(listadoEmpleados, asignado)
     else:
-        asignado = listaEmpleados[codEmpleado]
+        asignado = recuperarEmpleado(listadoEmpleados, codEmpleado)
     return asignado
 
 def seleccionarEstado():
@@ -209,20 +228,24 @@ def seleccionarEstado():
             print(ERROR_STRING)
             continue
         break
-    match(codEstado):
+    match codEstado:
         case 1:
             return "Pendiente"
         case 2:
             return "En progreso"
         case 3:
             return "Completada"
+        case _:
+            print(ERROR_STRING)
+            continue
 
 def seleccionarFecha():
     while True:
         try:
             strFecha = input("\n\tIngrese la fecha de vencimiento \n\tde la tarea (YYYY-MM-DD) > ")
-            anio, mes, dia = map(int, strFecha.split('-'))
-            fecha = datetime.date(anio, mes, dia)
+            #anio, mes, dia = map(int, strFecha.split('-'))
+            #fecha = datetime.date(anio, mes, dia)
+            fecha = date.fromisoformat(strFecha)
         except ValueError:
             print(ERROR_STRING)
             continue
@@ -233,11 +256,10 @@ def inputTarea():
     tarea = crearTarea()
     nombre = input("\n\n\tIngrese el nombre de la tarea \n\t> ")
     descripcion = input("\n\tIngrese la descripción de la tarea \n\t> ")
-    if len(listaEmpleados) == 0:
+    if tamanio(listaEmpleados) == 0:
         asignado = input("\n\tIngrese el nombre del empleado\n\ta quien se le asignará esta tarea \n\t> ")
-        #listaEmpleados.append(asignado)
     else:
-        asignado = seleccionarEmpleado()
+        asignado = seleccionarEmpleado(listadoEmpleados)
     estado = seleccionarEstado()
     vencimiento = seleccionarFecha()
     cargarTarea(tarea, nombre, descripcion, asignado, estado, vencimiento)
