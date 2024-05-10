@@ -53,6 +53,8 @@ def main():
         except ValueError:
             print(ERROR_STRING)
             continue
+        except EOFError:
+            continue
         if len(e) > 1:
             print(ERROR_STRING)
             continue
@@ -69,7 +71,7 @@ def main():
            case 5:
                 opcionActualizarPorLote(listadoTareas)
            case 6:
-                opcionReporteTareasPorEstado(listadoTareas)
+                opcionReporteTareasPorEstado2(listadoTareas)
            case 7:
                 opcionEliminarTareasEmpleado()
            case 8:
@@ -161,30 +163,31 @@ def opcionEliminarTarea(listadoTareas):
 
 
 def opcionMostrarListadoCompleto(listadoTareas):
-
     totTareas = tamanio(listadoTareas)
     tareasEnPantalla = 3
 
     if totTareas == 0:
         input(ERROR_EMPTY_STRING)
-    else:
-        for i in range(0, totTareas, tareasEnPantalla):
-            clear()
-            imprimir_banner()
-            for j in range(tareasEnPantalla):
-                tareaActual = i + j
-                if tareaActual < totTareas:
-                    imprimirTarea(recuperarTarea(listadoTareas, i + j))
-            restantes = totTareas - (i + tareasEnPantalla)
-            if restantes > 0:
-                input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
-            else:
-                input(CONTINUE_STRING)
+        return
+
+    for i in range(0, totTareas, tareasEnPantalla):
+        clear()
+        imprimir_banner()
+        for j in range(tareasEnPantalla):
+            tareaActual = i + j
+            if tareaActual < totTareas:
+                imprimirTarea(recuperarTarea(listadoTareas, i + j))
+        restantes = totTareas - (i + tareasEnPantalla)
+        if restantes > 0:
+            input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
+        else:
+            input(CONTINUE_STRING)
                       
 def opcionActualizarPorLote(listadoTareas):
     if tamanio(listadoTareas) == 0:
         input(ERROR_EMPTY_STRING)
         return
+
     print("\n\tFecha inical:")
     fechaInicial = date.fromisoformat(seleccionarFecha())
     print("\tFecha final:")
@@ -202,49 +205,39 @@ def opcionActualizarPorLote(listadoTareas):
     input(CONTINUE_STRING)
 
 def opcionReporteTareasPorEstado(listadoTareas):
-    estados = ["Pendiente", "En Progreso", "Completada"]
-    totTareas = tamanio(listadoTareas)
-    tareasEnPantalla = 3
+    listadoPendiente = crearListado()
+    listadoProgreso = crearListado()
+    listadoCompleto = crearListado()
+    for i in range(tamanio(listadoTareas)):
+        t = recuperarTarea(listadoTareas, i)
+        match verEstado(t):
+            case "Pendiente":
+                agregarTarea(listadoPendiente, t)
+            case "En Progreso":
+                agregarTarea(listadoProgreso, t)
+            case "Completada":
+                agregarTarea(listadoCompleto, t)
 
-    if totTareas == 0:
-        input(ERROR_EMPTY_STRING)
-    else:
-        for i in estados:
-            ctr = imprimirTareasFiltrado(listadoTareas, totTareas,
-                                         tareasEnPantalla, i)
-            if ctr == 0:
-                if i != "Completado":
-                     print(f"\n\tNo hay Tareas en estado {AM}{i}{R}")
-                     input(CONTINUE_STRING_2)
-                else:
-                     print(f"\n\tNo hay Tareas en estado {AM}{i}{R}")
+    imprimirSeccion(listadoPendiente, 3, "Pendiente")
+    imprimirSeccion(listadoProgreso, 3, "En Progreso")
+    imprimirSeccion(listadoCompleto, 3, "Completada")
 
-    #input(CONTINUE_STRING)
-        
-
-def imprimirTareasFiltrado(listadoTareas, totTareas, tareasEnPantalla, estado):
-    ctr = 0
-   
+def imprimirSeccion(listado, tareasEnPantalla, estado):
+    totTareas = tamanio(listado)
     for i in range(0, totTareas, tareasEnPantalla):
         clear()
         imprimir_banner()
         print(f"\n\tSección: {estado}")
         print(f"\t{AZ}********************{R}")
-
         for j in range(tareasEnPantalla):
             tareaActual = i + j
             if tareaActual < totTareas:
-                rta = recuperarTarea(listadoTareas, i + j)
-                valida = verEstado(rta) == estado
-                if valida:
-                    imprimirTarea(recuperarTarea(listadoTareas, i + j))
-                    ctr = ctr + 1
-                else:
-                  continue
-        if ctr != 0:
+                imprimirTarea(recuperarTarea(listado, i + j))
+        restantes = totTareas - (i + tareasEnPantalla)
+        if restantes > 0:
+            input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
+        else:
             input(CONTINUE_STRING_2)
-    return ctr
-
 
 #TODO
 def opcionEliminarTareasEmpleado():
