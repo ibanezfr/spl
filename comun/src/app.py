@@ -26,12 +26,12 @@ from os import system, name
 import testdata
 from testdata import *
 
-RO = "\033[91m"
-VE = "\033[92m"
-AM = "\033[93m"
-AZ = "\033[94m"
-BB = "\033[1;37m"
-R = "\033[0m"
+RO = "\033[91m" #Rojo
+VE = "\033[92m" #Verde
+AM = "\033[93m" #Amarillo
+AZ = "\033[94m" #Azul
+BB = "\033[1;37m" #Blanco Bold ("Negrita")
+R = "\033[0m" #Reset
 
 ERROR_VALUE_STRING = f"\n\t{RO}Valor incorrecto, vuelva a intentar{R}"
 ERROR_EMPTY_STRING = f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}"
