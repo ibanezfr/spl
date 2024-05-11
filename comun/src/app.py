@@ -181,10 +181,13 @@ def opcionMostrarListadoCompleto(listadoTareas):
     if totTareas == 0:
         input(ERROR_EMPTY_STRING)
         return
-
+    
     for i in range(0, totTareas, tareasEnPantalla):
         clear()
         imprimir_banner()
+        print(f"\n\t{BB}Listado Completo{R}")
+        print(f"\t{AZ}****************{R}")
+
         for j in range(tareasEnPantalla):
             tareaActual = i + j
             if tareaActual < totTareas:
