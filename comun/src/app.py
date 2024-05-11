@@ -1,20 +1,16 @@
-"""
-Archivo:        /comun/src/app.py
-Fecha:          5 de mayo de 2024
-Modificación:   
-Autores:        Piazza J., Ibañez F., Lucas M.
-
-
-Spec Menu:
-    - Agregar Tarea
-    - Modificar Tarea
-    - Eliminar Tarea
-    - Mostrar Listado Completo
-    - Modificar fecha de vecimiento (entre Fecha1 y Fecha2 -> cambia a FechaFinal)
-    - Reporte de tareas agrupadas por estado
-    - Eliminar todas las tareas asignadas a un empleado especifico
-    - Mostrar cola de tareas del mes
-    
+""" Archivo:        /comun/src/app.py 
+    Fecha:          5 de mayo de 2024 
+    Modificación:   
+    Autores:        Piazza J., Ibañez F., Lucas M. 
+    Spec Menu: 
+        - Agregar Tarea 
+        - Modificar Tarea 
+        - Eliminar Tarea 
+        - Mostrar Listado Completo 
+        - Modificar fecha de vecimiento (entre Fecha1 y Fecha2 -> cambia a FechaFinal) 
+        - Reporte de tareas agrupadas por estado 
+        - Eliminar todas las tareas asignadas a un empleado especifico 
+        - Mostrar cola de tareas en progreso 
     Preguntas:
     Cortar las fechas? Fecha mínima?
 """
@@ -37,12 +33,15 @@ AZ = "\033[94m"
 BB = "\033[1;37m"
 R = "\033[0m"
 
-ERROR_STRING = f"\n\t{RO}Valor incorrecto, vuelva a intentar{R}"
+ERROR_VALUE_STRING = f"\n\t{RO}Valor incorrecto, vuelva a intentar{R}"
 ERROR_EMPTY_STRING = f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}"
+ERROR_LOADED_STRING = f"\n\t{RO}Datos de prueba ya cargados, Enter para continuar...{R}"
 CONTINUE_STRING = f"\n\t{AM}Enter para terminar...{R}"
 CONTINUE_STRING_2 = f"\n\t{AM}Enter para continuar...{R}"
+datosCargados = False
 
 def main():
+    global datosCargados
     listadoTareas = crearListado()
     listadoEmpleados = crearEmpleados()
 
@@ -54,12 +53,10 @@ def main():
             e = input(f"\n\tIngrese su opción {BB}>{R} ")
             eleccion = int(e)
         except ValueError:
-            print(ERROR_STRING)
-            continue
-        except EOFError:
+            print(ERROR_VALUE_STRING)
             continue
         if len(e) > 1:
-            print(ERROR_STRING)
+            print(ERROR_VALUE_STRING)
             continue
 
         match eleccion:
@@ -80,12 +77,15 @@ def main():
            case 8:
                 opcionImprimirTareasDelMes()
            case 9:
-                opcionCargarDatos(listadoTareas, listadoEmpleados)
+                if not datosCargados:
+                    datosCargados = opcionCargarDatos(listadoTareas, listadoEmpleados)
+                else:
+                    input(ERROR_LOADED_STRING)
            case 0:
                 print(f"\n{AM}Cerrando...{R}\n")
                 sys.exit()
            case _:
-                print(ERROR_STRING)
+                print(ERROR_VALUE_STRING)
                 continue
 
         clear()
@@ -106,7 +106,11 @@ def imprimir_menu():
     print(f"\n\t{BB}5{R}. Actualizar Fechas de Vencimiento Por Lote")
     print(f"\n\t{BB}6{R}. Reporte de Tareas Agrupadas por Estado")
     print(f"\n\t{BB}7{R}. Eliminar Tareas de un Empleado {AM}<WIP>{R}")
-    print(f"\n\t{BB}8{R}. Imprimir Lista de Tareas del Mes {AM}<WIP>{R}")
+    print(f"\n\t{BB}8{R}. Imprimir Cola de Tareas En Progreso {AM}<WIP>{R}")
+    if not datosCargados: 
+        print(f"\n\t{BB}9{R}. Cargar Datos de Prueba")
+    else:
+        print(f"\n\t{VE}9. Cargar Datos de Prueba {R}")
     print(f"\n\t{BB}0{R}. Cerrar Aplicación\n")
 
 def clear():
@@ -241,6 +245,7 @@ def opcionImprimirTareasDelMes():
 
 def opcionCargarDatos(listaTareas, listadoEmpleados):
     cargarDatos(listaTareas, listadoEmpleados)
+    return True
 
 def imprimirSeccion(listado, tareasEnPantalla, estado):
     totTareas = tamanio(listado)
@@ -291,10 +296,10 @@ def seleccionarTarea(listadoTareas):
         try:
             cod = int(input("Ingrese el codigo de la tarea deseada: "))
         except:
-            print(ERROR_STRING)
+            print(ERROR_VALUE_STRING)
             continue
         if cod >= tamanio(listadoTareas) or cod < 0:
-            print(ERROR_STRING)
+            print(ERROR_VALUE_STRING)
             continue
         print("Tarea seleccionada:")
         tarea = recuperarTarea(listadoTareas, cod)
@@ -314,10 +319,10 @@ def seleccionarEmpleado(listadoEmpleados):
         try:
             codEmpleado = int(input(f"\t {BB}>{R} "))
         except ValueError:
-            print(ERROR_STRING)
+            print(ERROR_VALUE_STRING)
             continue
         if codEmpleado < 0 or codEmpleado > tamanio(listadoEmpleados):
-            print(ERROR_STRING)
+            print(ERROR_VALUE_STRING)
             continue
         break
     if codEmpleado == tamanio(listadoEmpleados):
@@ -336,7 +341,7 @@ def seleccionarEstado():
             print(f"\t\t{BB}3{R}. Completada")
             codEstado = int(input("\n\t\t> "))
         except ValueError:
-            print(ERROR_STRING)
+            print(ERROR_VALUE_STRING)
             continue
         match codEstado:
             case 1:
@@ -346,7 +351,7 @@ def seleccionarEstado():
             case 3:
                 return "Completada"
             case _:
-                print(ERROR_STRING)
+                print(ERROR_VALUE_STRING)
                 continue
 
 def seleccionarFecha():
@@ -356,7 +361,7 @@ def seleccionarFecha():
             dia, mes, anio = map(int, strFecha.split('-'))
             fecha = datetime.date(anio, mes, dia)
         except ValueError:
-            print(ERROR_STRING)
+            print(ERROR_VALUE_STRING)
             continue
         break
     return fecha.isoformat()
