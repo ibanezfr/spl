@@ -30,7 +30,7 @@ def tamanio(cola):
     """Retorna la cantidad de elementos de la cola"""
     return len(cola)
 
-def copiarCola(cola1,cola2)
+def copiarCola(cola1,cola2):
     """Copia los elementos de cola2 en cola1"""
     aux=creaCola()
 
