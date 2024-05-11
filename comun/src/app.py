@@ -30,7 +30,7 @@ RO = "\033[91m" #Rojo
 VE = "\033[92m" #Verde
 AM = "\033[93m" #Amarillo
 AZ = "\033[94m" #Azul
-BB = "\033[1;37m" #Blanco Bold ("Negrita")
+BB = "\033[1;37m" #Bold Blanco ("Negrita")
 R = "\033[0m" #Reset
 
 ERROR_VALUE_STRING = f"\n\t{RO}Valor incorrecto, vuelva a intentar{R}"
