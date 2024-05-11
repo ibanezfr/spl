@@ -38,12 +38,13 @@ ERROR_EMPTY_STRING = f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}
 ERROR_LOADED_STRING = f"\n\t{RO}Datos de prueba ya cargados, Enter para continuar...{R}"
 CONTINUE_STRING = f"\n\t{AM}Enter para terminar...{R}"
 CONTINUE_STRING_2 = f"\n\t{AM}Enter para continuar...{R}"
-datosCargados = False
+DATOS_CARGADOS = False
 
 def main():
-    global datosCargados
+    global DATOS_CARGADOS
     listadoTareas = crearListado()
     listadoEmpleados = crearEmpleados()
+    colaTareasEnProgreso = crearCola()
 
     clear()
     imprimir_banner()
@@ -77,8 +78,8 @@ def main():
            case 8:
                 opcionImprimirTareasDelMes()
            case 9:
-                if not datosCargados:
-                    datosCargados = opcionCargarDatos(listadoTareas, listadoEmpleados)
+                if not DATOS_CARGADOS:
+                    DATOS_CARGADOS = opcionCargarDatos(listadoTareas, listadoEmpleados)
                 else:
                     input(ERROR_LOADED_STRING)
            case 0:
@@ -107,7 +108,7 @@ def imprimir_menu():
     print(f"\n\t{BB}6{R}. Reporte de Tareas Agrupadas por Estado")
     print(f"\n\t{BB}7{R}. Eliminar Tareas de un Empleado {AM}<WIP>{R}")
     print(f"\n\t{BB}8{R}. Imprimir Cola de Tareas En Progreso {AM}<WIP>{R}")
-    if not datosCargados: 
+    if not DATOS_CARGADOS: 
         print(f"\n\t{BB}9{R}. Cargar Datos de Prueba")
     else:
         print(f"\n\t{VE}9. Cargar Datos de Prueba {R}")
