@@ -8,7 +8,7 @@ Spec:
         queue of Tarea
 """
 
-def creaCola():
+def crearCola():
     """Crea una cola vacía"""
     cola=[]
     return cola
