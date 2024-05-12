@@ -136,6 +136,9 @@ def opcionAgregarTarea(listadoTareas, listadoEmpleados, cola):
         break
 
     agregarTarea(listadoTareas, tarea)
+
+    if tarea[3] == "En Progreso":
+        encolar(cola, tarea)
     
     if tamanio(listadoEmpleados) == 0:
        agregarEmpleado(listadoEmpleados, verAsignado(tarea))
@@ -285,10 +288,6 @@ def inputTarea(listadoEmpleados):
     estado = seleccionarEstado()
     vencimiento = seleccionarFecha()
     cargarTarea(tarea, nombre, descripcion, asignado, estado, vencimiento)
-
-    #provisorio, solo para probar la impresión
-    if tarea[3] == "En Progreso":
-        encolar(cola, tarea)
 
     return tarea
 
