@@ -149,4 +149,4 @@ def cargarDatos(listadoTareas, listadoEmpleados, cola):
         agregarEmpleado(listadoEmpleados, a)
         agregarTarea(listadoTareas, t)
         if tarea[3] == "En Progreso":
-            encolar(cola, tarea)
+            encolar(cola, t)
