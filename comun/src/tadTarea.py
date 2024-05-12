@@ -76,4 +76,16 @@ def asignarTarea(tareaDestino, tareaFuente):
     modVencimiento(tareaDestino, verVencimiento(tareaFuente))
 
 def sonIguales(tarea1, tarea2):
-    return tarea1[0] == tarea2[0] and tarea1[1] == tarea2[1] and tarea1[2] == tarea2[2] and tarea1[3] == tarea2[3] and date.isoformat(tarea1[4]) == date.isoformat(tarea2[4])
+    """Retorna True si tarea1 y tarea2 son exactamente iguales,
+    de lo contrario retorna False"""
+
+    n = verNombre(tarea1) == verNombre(tarea2)
+    d = verDescripcion(tarea1) == verDescripcion(tarea2)
+    a = verAsignado(tarea1) == verAsignado(tarea2)
+    e = verEstado(tarea1) == verEstado(tarea2)
+    vUno =  verVencimiento(tarea1)
+    vDos =  verVencimiento(tarea2)
+    v = vUno == vDos
+
+    return n and d and a and e and v
+
