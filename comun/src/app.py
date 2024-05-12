@@ -35,6 +35,7 @@ R = "\033[0m" #Reset
 
 ERROR_VALUE_STRING = f"\n\t{RO}Valor incorrecto, vuelva a intentar{R}"
 ERROR_EMPTY_STRING = f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}"
+ERROR_EMPTY_STRING_2 = f"\n\t{AM}Lista de tareas 'En Progreso' VACIA, Enter para continuar...{R}"
 ERROR_LOADED_STRING = f"\n\t{RO}Datos de prueba ya cargados, Enter para continuar...{R}"
 CONTINUE_STRING = f"\n\t{AM}Enter para terminar...{R}"
 CONTINUE_STRING_2 = f"\n\t{AM}Enter para continuar...{R}"
@@ -62,7 +63,7 @@ def main():
 
         match eleccion:
            case 1:
-                opcionAgregarTarea(listadoTareas, listadoEmpleados)
+                opcionAgregarTarea(listadoTareas, listadoEmpleados, colaTareasEnProgreso)
            case 2:
                 opcionModificarTarea(listadoTareas, listadoEmpleados)
            case 3:
@@ -76,10 +77,10 @@ def main():
            case 7:
                 opcionEliminarTareasEmpleado()
            case 8:
-                opcionImprimirTareasDelMes()
+                opcionImprimirTareasEnProgreso(colaTareasEnProgreso)
            case 9:
                 if not _datosCargados:
-                    _datosCargados = opcionCargarDatos(listadoTareas, listadoEmpleados)
+                    _datosCargados = opcionCargarDatos(listadoTareas, listadoEmpleados, colaTareasEnProgreso)
                 else:
                     input(ERROR_LOADED_STRING)
            case 0:
@@ -107,11 +108,11 @@ def imprimir_menu():
     print(f"\n\t{BB}5{R}. Actualizar Fechas de Vencimiento Por Lote")
     print(f"\n\t{BB}6{R}. Reporte de Tareas Agrupadas por Estado")
     print(f"\n\t{BB}7{R}. Eliminar Tareas de un Empleado {AM}<WIP>{R}")
-    print(f"\n\t{BB}8{R}. Imprimir Cola de Tareas En Progreso {AM}<WIP>{R}")
+    print(f"\n\t{BB}8{R}. Imprimir Lista de Tareas En Progreso")
     if not _datosCargados: 
         print(f"\n\t{BB}9{R}. Cargar Datos de Prueba")
     else:
-        print(f"\n\t{VE}9. Cargar Datos de Prueba {R}")
+        print(f"\n\t{VE}9. Cargar Datos de Prueba{R}")
     print(f"\n\t{BB}0{R}. Cerrar Aplicación\n")
 
 def clear():
@@ -122,8 +123,7 @@ def clear():
 
 ### Funciones del menu ###
 
-def opcionAgregarTarea(listadoTareas, listadoEmpleados):
-
+def opcionAgregarTarea(listadoTareas, listadoEmpleados, cola):
     while True:
         clear()
         imprimir_banner()
@@ -136,7 +136,7 @@ def opcionAgregarTarea(listadoTareas, listadoEmpleados):
         break
 
     agregarTarea(listadoTareas, tarea)
-
+    
     if tamanio(listadoEmpleados) == 0:
        agregarEmpleado(listadoEmpleados, verAsignado(tarea))
 
@@ -242,13 +242,11 @@ def opcionEliminarTareasEmpleado():
     print(f"\n\t{RO}Función no implementada <WIP>{R}")
     input(CONTINUE_STRING)
 
-#TODO
-def opcionImprimirTareasDelMes():
-    print(f"\n\t{RO}Función no implementada <WIP>{R}")
-    input(CONTINUE_STRING)
+def opcionImprimirTareasEnProgreso(cola):
+    imprimirCola(cola)
 
-def opcionCargarDatos(listaTareas, listadoEmpleados):
-    cargarDatos(listaTareas, listadoEmpleados)
+def opcionCargarDatos(listaTareas, listadoEmpleados, cola):
+    cargarDatos(listaTareas, listadoEmpleados, cola)
     return True
 
 def imprimirSeccion(listado, tareasEnPantalla, estado):
@@ -287,8 +285,11 @@ def inputTarea(listadoEmpleados):
     estado = seleccionarEstado()
     vencimiento = seleccionarFecha()
     cargarTarea(tarea, nombre, descripcion, asignado, estado, vencimiento)
-    #if estado == "En Progreso":
-        #Encolar
+
+    #provisorio, solo para probar la impresión
+    if tarea[3] == "En Progreso":
+        encolar(cola, tarea)
+
     return tarea
 
 ### Funciones auxiliares ###
@@ -370,5 +371,38 @@ def seleccionarFecha():
         break
     return fecha.isoformat()
 
+### Funciones gestión cola de tareas ###
+
+def imprimirCola(cola):
+    if colaEsVacia(cola):
+        print(ERROR_EMPTY_STRING_2)
+        input(CONTINUE_STRING)
+    else:
+        colaAux = crearCola()
+        copiarCola(colaAux, cola)
+        cantTareas = tamanioCola(colaAux)
+        maxTareasEnPantalla = 3
+
+        while not colaEsVacia(colaAux):
+            clear()
+            imprimir_banner()
+            print(f"\n\tLista de Tareas 'En Progreso'")
+            print(f"\t{AZ}****************************{R}")
+
+            ctr = 0
+            while not colaEsVacia(colaAux) and ctr < maxTareasEnPantalla:
+                ctr = ctr + 1
+                tareaAux = desencolar(colaAux)
+                imprimirTarea(tareaAux)
+
+            restantes = tamanioCola(colaAux)
+            if restantes > 0:
+                input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
+            else:
+                input(CONTINUE_STRING)
+
+
+
 if __name__ == '__main__':
     main()
+
