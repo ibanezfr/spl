@@ -26,11 +26,7 @@ def cargarDatos(listadoTareas, listadoEmpleados):
 """
 
 
-<<<<<<< HEAD
-def cargarDatos(listadoTareas, listadoEmpleados):
-=======
 def cargarDatos(listadoTareas, listadoEmpleados, cola):
->>>>>>> 289ac705231134ad38a3f0b08f48001f092f4489
 
     listaDatosTareasFicticias = [
     [
