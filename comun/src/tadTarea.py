@@ -75,3 +75,5 @@ def asignarTarea(tareaDestino, tareaFuente):
     modEstado(tareaDestino, verEstado(tareaFuente))
     modVencimiento(tareaDestino, verVencimiento(tareaFuente))
 
+def sonIguales(tarea1, tarea2):
+    return tarea1[0] == tarea2[0] and tarea1[1] == tarea2[1] and tarea1[2] == tarea2[2] and tarea1[3] == tarea2[3] and date.isoformat(tarea1[4]) == date.isoformat(tarea2[4])
