@@ -1,8 +1,9 @@
-import tadTarea, tadListado, tadEmpleados, datetime
+import tadTarea, tadListado, tadEmpleados, datetime, tadCola
 from datetime import date
 from tadTarea import *
 from tadListado import *
 from tadEmpleados import *
+from tadCola import *
 
 """
 def cargarDatos(listadoTareas, listadoEmpleados):
@@ -25,7 +26,11 @@ def cargarDatos(listadoTareas, listadoEmpleados):
 """
 
 
+<<<<<<< HEAD
 def cargarDatos(listadoTareas, listadoEmpleados):
+=======
+def cargarDatos(listadoTareas, listadoEmpleados, cola):
+>>>>>>> 289ac705231134ad38a3f0b08f48001f092f4489
 
     listaDatosTareasFicticias = [
     [
@@ -147,3 +152,5 @@ def cargarDatos(listadoTareas, listadoEmpleados):
         cargarTarea(t, n, d, a, e, f)
         agregarEmpleado(listadoEmpleados, a)
         agregarTarea(listadoTareas, t)
+        if tarea[3] == "En Progreso":
+            encolar(cola, tarea)

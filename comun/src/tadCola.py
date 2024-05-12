@@ -13,7 +13,7 @@ def crearCola():
     cola=[]
     return cola
 
-def esVacia(cola):
+def colaEsVacia(cola):
     """Retorna True si la cola no tiene elementos"""
     return len(cola)==0
 
@@ -26,19 +26,19 @@ def desencolar(cola):
     elem = cola.pop(0)
     return elem
 
-def tamanio(cola):
+def tamanioCola(cola):
     """Retorna la cantidad de elementos de la cola"""
     return len(cola)
 
 def copiarCola(cola1,cola2):
     """Copia los elementos de cola2 en cola1"""
-    aux=creaCola()
+    aux=crearCola()
 
-    while not esVacia(cola2):
+    while not colaEsVacia(cola2):
         elem=desencolar(cola2)
         encolar(aux,elem)
 
-    while not esVacia(aux):
+    while not colaEsVacia(aux):
         elem=desencolar(aux)
         encolar(cola1,elem)
         encolar(cola2,elem)
