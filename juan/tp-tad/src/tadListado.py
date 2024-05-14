@@ -32,3 +32,4 @@ def recuperarTarea(listado, i):
 def tamanio(listado):
     """Retorna la cantidad de tareas en el listado"""
     return len(listado)
+

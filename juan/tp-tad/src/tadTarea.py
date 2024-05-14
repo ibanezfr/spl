@@ -69,8 +69,23 @@ def modVencimiento(tarea, vencimiento):
 
 def asignarTarea(tareaDestino, tareaFuente):
     """Asigna el valor de la tarea fuente a la tarea destino"""
-    tareaDestino[0] = tareaFuente[0]
-    tareaDestino[1] = tareaFuente[1]
-    tareaDestino[2] = tareaFuente[2]
-    tareaDestino[3] = tareaFuente[3]
-    tareaDestino[4] = tareaFuente[4]
+    modNombre(tareaDestino, verNombre(tareaFuente))
+    modDescripcion(tareaDestino, verDescripcion(tareaFuente))
+    modAsignado(tareaDestino, verAsignado(tareaFuente))
+    modEstado(tareaDestino, verEstado(tareaFuente))
+    modVencimiento(tareaDestino, verVencimiento(tareaFuente))
+
+def sonIguales(tarea1, tarea2):
+    """Retorna True si tarea1 y tarea2 son exactamente iguales,
+    de lo contrario retorna False"""
+
+    n = verNombre(tarea1) == verNombre(tarea2)
+    d = verDescripcion(tarea1) == verDescripcion(tarea2)
+    a = verAsignado(tarea1) == verAsignado(tarea2)
+    e = verEstado(tarea1) == verEstado(tarea2)
+    vUno =  verVencimiento(tarea1)
+    vDos =  verVencimiento(tarea2)
+    v = vUno == vDos
+
+    return n and d and a and e and v
+
