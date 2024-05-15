@@ -1,37 +1,50 @@
-""" Archivo:        /comun/src/app.py 
-    Fecha:          5 de mayo de 2024 
-    Modificación:   
-    Autores:        Piazza J., Ibañez F., Lucas M. 
-    Spec Menu: 
-        - Agregar Tarea 
-        - Modificar Tarea 
-        - Eliminar Tarea 
-        - Mostrar Listado Completo 
-        - Modificar fecha de vecimiento (entre Fecha1 y Fecha2 -> cambia a FechaFinal) 
-        - Reporte de tareas agrupadas por estado 
-        - Eliminar todas las tareas asignadas a un empleado especifico 
-        - Mostrar cola de tareas en progreso 
+""" Archivo:        /comun/src/app.py
+    Fecha:          5 de mayo de 2024
+    Modificación:
+    Autores:        Piazza J., Ibañez F., Lucas M.
+    Spec Menu:
+        - Agregar Tarea
+        - Modificar Tarea
+        - Eliminar Tarea
+        - Mostrar Listado Completo
+        - Modificar fecha de vecimiento (entre Fecha1 y Fecha2 -> cambia a
+                                         FechaFinal)
+        - Reporte de tareas agrupadas por estado
+        - Eliminar todas las tareas asignadas a un empleado especifico
+        - Mostrar cola de tareas en progreso
     Preguntas:
     Cortar las fechas? Fecha mínima?
 """
 
-import tadTarea, tadListado, tadEmpleados, tadCola, datetime, os, sys
-from tadTarea import *
-from tadListado import *
-from tadEmpleados import *
-from tadCola import *
+import tadTarea
+import tadListado
+import tadEmpleados
+import tadCola
+import datetime
+import os
+import sys
+from tadTarea import (crearTarea, cargarTarea, verNombre, verDescripcion,
+                      verAsignado, verEstado, verVencimiento, modNombre,
+                      modDescripcion, modAsignado, modEstado, modVencimiento,
+                      asignarTarea, sonIguales)
+from tadListado import (crearListado, agregarTarea, eliminarTarea,
+                        recuperarTarea, tamanio)
+from tadEmpleados import (crearEmpleados, agregarEmpleado, eliminarEmpleado,
+                          recuperarEmpleado, tamanio)
+from tadCola import (crearCola, colaEsVacia, encolar, desencolar, tamanioCola,
+                     copiarCola)
 from datetime import date
 from os import system, name
 
 import testdata
-from testdata import *
+from testdata import cargarDatos
 
-RO = "\033[91m" #Rojo
-VE = "\033[92m" #Verde
-AM = "\033[93m" #Amarillo
-AZ = "\033[94m" #Azul
-BB = "\033[1;37m" #Bold Blanco ("Negrita")
-R = "\033[0m" #Reset
+RO = "\033[91m"  # Rojo
+VE = "\033[92m"  # Verde
+AM = "\033[93m"  # Amarillo
+AZ = "\033[94m"  # Azul
+BB = "\033[1;37m"  # Bold Blanco ("Negrita")
+R = "\033[0m"  # Reset
 
 ERROR_VALUE_STRING = f"\n\t{RO}Valor incorrecto, vuelva a intentar{R}"
 ERROR_EMPTY_STRING = f"\n\t{AM}Lista de tareas VACIA, Enter para continuar...{R}"
@@ -40,6 +53,7 @@ ERROR_LOADED_STRING = f"\n\t{RO}Datos de prueba ya cargados, Enter para continua
 CONTINUE_STRING = f"\n\t{AM}Enter para terminar...{R}"
 CONTINUE_STRING_2 = f"\n\t{AM}Enter para continuar...{R}"
 _datosCargados = False
+
 
 def main():
     global _datosCargados
@@ -62,42 +76,46 @@ def main():
             continue
 
         match eleccion:
-           case 1:
-                opcionAgregarTarea(listadoTareas, listadoEmpleados, colaTareasEnProgreso)
-           case 2:
+            case 1:
+                opcionAgregarTarea(listadoTareas, listadoEmpleados,
+                                   colaTareasEnProgreso)
+            case 2:
                 opcionModificarTarea(listadoTareas, listadoEmpleados)
-           case 3:
+            case 3:
                 opcionEliminarTarea(listadoTareas)
-           case 4:
+            case 4:
                 opcionMostrarListadoCompleto(listadoTareas)
-           case 5:
+            case 5:
                 opcionActualizarPorLote(listadoTareas)
-           case 6:
+            case 6:
                 opcionReporteTareasPorEstado(listadoTareas)
-           case 7:
+            case 7:
                 opcionEliminarTareasEmpleado()
-           case 8:
+            case 8:
                 opcionImprimirTareasEnProgreso(colaTareasEnProgreso)
-           case 9:
+            case 9:
                 if not _datosCargados:
-                    _datosCargados = opcionCargarDatos(listadoTareas, listadoEmpleados, colaTareasEnProgreso)
+                    _datosCargados = opcionCargarDatos(listadoTareas,
+                                                       listadoEmpleados,
+                                                       colaTareasEnProgreso)
                 else:
                     input(ERROR_LOADED_STRING)
-           case 0:
+            case 0:
                 print(f"\n{AM}Cerrando...{R}\n")
                 sys.exit()
-           case _:
+            case _:
                 print(ERROR_VALUE_STRING)
                 continue
 
         clear()
         imprimir_banner()
         imprimir_menu()
-        
-### Funciones auxiliares para menu ###
+
+
+# Funciones auxiliares para menu
 def imprimir_banner():
     print("\tGrupo 01 - Sintaxis y Semántica del Lenguaje - 2024")
-    print(f"\t\t\t{BB}*** TIENDA SOFT ***{R}") 
+    print(f"\t\t\t{BB}*** TIENDA SOFTWARE ***{R}")
 
 
 def imprimir_menu():
@@ -109,11 +127,12 @@ def imprimir_menu():
     print(f"\n\t{BB}6{R}. Reporte de Tareas Agrupadas por Estado")
     print(f"\n\t{BB}7{R}. Eliminar Tareas de un Empleado {AM}<WIP>{R}")
     print(f"\n\t{BB}8{R}. Imprimir Lista de Tareas En Progreso")
-    if not _datosCargados: 
+    if not _datosCargados:
         print(f"\n\t{BB}9{R}. Cargar Datos de Prueba")
     else:
         print(f"\n\t{VE}9. Cargar Datos de Prueba{R}")
     print(f"\n\t{BB}0{R}. Cerrar Aplicación\n")
+
 
 def clear():
     if name == 'nt':
@@ -121,8 +140,8 @@ def clear():
     else:
         _ = system('clear')
 
-### Funciones del menu ###
 
+# Funciones del menu
 def opcionAgregarTarea(listadoTareas, listadoEmpleados, cola):
     while True:
         clear()
@@ -139,9 +158,10 @@ def opcionAgregarTarea(listadoTareas, listadoEmpleados, cola):
 
     if tarea[3] == "En Progreso":
         encolar(cola, tarea)
-    
+
     if tamanio(listadoEmpleados) == 0:
-       agregarEmpleado(listadoEmpleados, verAsignado(tarea))
+        agregarEmpleado(listadoEmpleados, verAsignado(tarea))
+
 
 def opcionModificarTarea(listadoTareas, listadoEmpleados):
     if tamanio(listadoTareas) == 0:
@@ -184,7 +204,7 @@ def opcionMostrarListadoCompleto(listadoTareas):
     if totTareas == 0:
         input(ERROR_EMPTY_STRING)
         return
-    
+
     for i in range(0, totTareas, tareasEnPantalla):
         clear()
         imprimir_banner()
@@ -200,7 +220,8 @@ def opcionMostrarListadoCompleto(listadoTareas):
             input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
         else:
             input(CONTINUE_STRING)
-                      
+
+
 def opcionActualizarPorLote(listadoTareas):
     if tamanio(listadoTareas) == 0:
         input(ERROR_EMPTY_STRING)
@@ -222,6 +243,7 @@ def opcionActualizarPorLote(listadoTareas):
     print(f'Se modificaron {mod} tarea/s')
     input(CONTINUE_STRING)
 
+
 def opcionReporteTareasPorEstado(listadoTareas):
     listadoPendiente = crearListado()
     listadoProgreso = crearListado()
@@ -240,17 +262,21 @@ def opcionReporteTareasPorEstado(listadoTareas):
     imprimirSeccion(listadoProgreso, 3, "En Progreso")
     imprimirSeccion(listadoCompleto, 3, "Completada")
 
-#TODO
+
+# TODO
 def opcionEliminarTareasEmpleado():
     print(f"\n\t{RO}Función no implementada <WIP>{R}")
     input(CONTINUE_STRING)
 
+
 def opcionImprimirTareasEnProgreso(cola):
     imprimirCola(cola)
+
 
 def opcionCargarDatos(listaTareas, listadoEmpleados, cola):
     cargarDatos(listaTareas, listadoEmpleados, cola)
     return True
+
 
 def imprimirSeccion(listado, tareasEnPantalla, estado):
     totTareas = tamanio(listado)
@@ -269,6 +295,7 @@ def imprimirSeccion(listado, tareasEnPantalla, estado):
         else:
             input(CONTINUE_STRING_2)
 
+
 def imprimirTarea(tarea):
     print(f'\n\t{BB}Nombre:{R} \t\t{verNombre(tarea)}')
     print(f'\t{BB}Descripcion:{R} \t\t{verDescripcion(tarea)}')
@@ -276,6 +303,7 @@ def imprimirTarea(tarea):
     print(f'\t{BB}Estado:{R} \t\t{verEstado(tarea)}')
     f = date.fromisoformat(verVencimiento(tarea))
     print(f'\t{BB}Fecha de vencimiento:{R} \t{f.day}-{f.month}-{f.year}')
+
 
 def inputTarea(listadoEmpleados):
     tarea = crearTarea()
@@ -291,7 +319,8 @@ def inputTarea(listadoEmpleados):
 
     return tarea
 
-### Funciones auxiliares ###
+
+# Funciones auxiliares
 def seleccionarTarea(listadoTareas):
     tarea = crearTarea()
     for i in range(tamanio(listadoTareas)):
@@ -313,6 +342,7 @@ def seleccionarTarea(listadoTareas):
             continue
         break
     return tarea
+
 
 def seleccionarEmpleado(listadoEmpleados):
     while True:
@@ -336,6 +366,7 @@ def seleccionarEmpleado(listadoEmpleados):
         asignado = recuperarEmpleado(listadoEmpleados, codEmpleado)
     return asignado
 
+
 def seleccionarEstado():
     while True:
         try:
@@ -358,6 +389,7 @@ def seleccionarEstado():
                 print(ERROR_VALUE_STRING)
                 continue
 
+
 def seleccionarFecha():
     while True:
         try:
@@ -370,8 +402,8 @@ def seleccionarFecha():
         break
     return fecha.isoformat()
 
-### Funciones gestión cola de tareas ###
 
+# Funciones gestión cola de tareas
 def imprimirCola(cola):
     if colaEsVacia(cola):
         print(ERROR_EMPTY_STRING_2)
@@ -385,7 +417,7 @@ def imprimirCola(cola):
         while not colaEsVacia(colaAux):
             clear()
             imprimir_banner()
-            print(f"\n\tLista de Tareas 'En Progreso'")
+            print("\n\tLista de Tareas 'En Progreso'")
             print(f"\t{AZ}****************************{R}")
 
             ctr = 0
@@ -401,7 +433,5 @@ def imprimirCola(cola):
                 input(CONTINUE_STRING)
 
 
-
 if __name__ == '__main__':
     main()
-

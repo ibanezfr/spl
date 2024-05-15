@@ -4,10 +4,12 @@ Spec:
         List of string
 """
 
+
 def crearEmpleados():
     """Retorna un listado de empleados vacio"""
     empleados = []
     return empleados
+
 
 def agregarEmpleado(empleados, e):
     """Agrega un empleado al listado de empleados
@@ -17,6 +19,7 @@ def agregarEmpleado(empleados, e):
     """
     empleados.append(e)
 
+
 def eliminarEmpleado(empleados, e):
     """Elimina un empleado del listado de empleados
         Parametros:
@@ -25,9 +28,11 @@ def eliminarEmpleado(empleados, e):
     """
     empleados.remove(e)
 
+
 def recuperarEmpleado(empleados, i):
     """Retorna el empleado en la posicion i (el indice empieza en 0)"""
     return empleados[i]
+
 
 def tamanio(empleados):
     """Retorna la cantidad de empleados en el listado"""
