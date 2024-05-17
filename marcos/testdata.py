@@ -32,8 +32,8 @@ def cargarDatos(listadoTareas, listadoEmpleados, cola):
 
     Args:
         listadoTareas(): una instancia de la clase tadListado que representa la lista de tareas.
-        listadoEmpleados(): Una instancia de la clase tadListado que representa la lista de mpoleados.
-        cola(): Una instancia de la clase tadCola qye representa la cola de tareas.
+        listadoEmpleados(): Una instancia de la clase tadListado que representa la lista de empleados.
+        cola(): Una instancia de la clase tadCola que representa la cola de tareas.
 
     Returns:
         None
