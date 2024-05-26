@@ -180,11 +180,12 @@ def opcionModificarTarea(listadoTareas, listadoEmpleados, cola):
         if r == "n":
             continue
         break
-    if verEstado(tarea) == "En Progreso":
-        if verEstado(tareaTemporal) == "En Progreso":
-            modificarEncolado(cola, tarea, tareaTemporal)
-        else:
-            eliminarEncolado(cola, tarea)
+    if verEstado(tarea) == "En Progreso" and verEstado(tareaTemporal) == "En Progreso":
+        modificarEncolado(cola, tarea, tareaTemporal)
+    elif verEstado(tarea) == "En Progreso":
+        eliminarEncolado(cola, tarea)
+    elif verEstado(tareaTemporal) == "En Progreso":
+        encolar(cola, tareaTemporal)
     asignarTarea(tarea, tareaTemporal)
 
 
@@ -238,8 +239,9 @@ def opcionActualizarPorLote(listadoTareas, cola):
     fechaNueva = seleccionarFecha()
     mod = 0
     for i in range(tamanio(listadoTareas)):
+        t = crearTarea()
         tOriginal = recuperarTarea(listadoTareas, i)
-        t = tOriginal
+        asignarTarea(t, tOriginal)
         d = date.fromisoformat(verVencimiento(t))
         if d >= fechaInicial and d <= fechaFinal:
             modVencimiento(t, fechaNueva)
@@ -270,7 +272,7 @@ def opcionReporteTareasPorEstado(listadoTareas):
 
 
 def opcionEliminarTareasEmpleado(listadoTareas, listadoEmpleados,
-                                 colaTareasEnProgreso, cola):
+                                 colaTareasEnProgreso):
     em = seleccionarEmpleado(listadoEmpleados)
     count = 0
     i = 0
@@ -279,8 +281,7 @@ def opcionEliminarTareasEmpleado(listadoTareas, listadoEmpleados,
         if verAsignado(t) == em:
             eliminarTarea(listadoTareas, t)
             if verEstado(t) == "En Progreso":
-                eliminarEncolado(cola, t)
-                print("modifica cola")
+                eliminarEncolado(colaTareasEnProgreso, t)
             count += 1
         else:
             i += 1
@@ -450,40 +451,8 @@ def imprimirCola(cola):
                 input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
             else:
                 input(CONTINUE_STRING)
-
-
-def eliminarEncolado(cola, tarea):
-    """Recibe una cola y una tarea como argumentos. Busca la tarea
-    dentro de la cola y, si la encuentra, la elimina."""
-    colaAux = crearCola()
-    
-    while tamanioCola(cola) != 0:
-        tareaAux = desencolar(cola)
-        if sonIguales(tarea, tareaAux):
-            continue
-        else:
-            encolar(colaAux, tareaAux)
-
-    cola = colaAux
-
-
-def modificarEncolado(cola, tOriginal, tModificada):
-    """Recibe una cola, una tarea de referencia y una tarea modificada, busca
-    la tarea de referencia en la cola y, si la encuentra, la intercambia
-    por la tarea modificada"""
-    colaAux = crearCola()
-
-    while tamanioCola(cola) != 0:
-        tareaAux = desencolar(cola)
-        if sonIguales(tOriginal, tareaAux):
-            tareaAux = tModificada
-            encolar(colaAux, tareaAux)
-        else:
-            encolar(colaAux, tareaAux)
-
-    cola = colaAux
-
-
+ 
+ 
 # Carga de datos
 def cargarDatos(listadoTareas, listadoEmpleados, cola):
     input = []
