@@ -454,9 +454,9 @@ def imprimirCola(cola):
                 input(CONTINUE_STRING)
 
 
-# 189 eliminarEncolado(tarea)
-# 201 eliminarEncolado(tarea)
-# 284 eliminarEncolado(t)
+# 189 eliminarEncolado(cola, tarea)
+# 201 eliminarEncolado(cola, tarea)
+# 284 eliminarEncolado(cola, t)
 def eliminarEncolado(cola, tarea):
     """Recibe una cola y una tarea como argumentos. Busca la tarea
     dentro de la cola y, si la encuentra, la elimina."""
@@ -474,6 +474,7 @@ def eliminarEncolado(cola, tarea):
 
 # 186 modificarEncolado(cola, tarea, tareaTemporal)
 # 249 modificarEncolado(cola, t)
+def modificarEncolado(cola, tarea, tareaTemporal)
 
 
 # Carga de datos
