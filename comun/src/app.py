@@ -230,7 +230,6 @@ def opcionActualizarPorLote(listadoTareas, cola):
         input(ERROR_EMPTY_STRING)
         return
 
-#TODO: Mostrar lista de tareas modificadas (Nombre - Fecha original || Nombre - Fecha nueva)
     print("\n\tFecha inical:")
     fechaInicial = date.fromisoformat(seleccionarFecha())
     print("\tFecha final:")
@@ -238,6 +237,7 @@ def opcionActualizarPorLote(listadoTareas, cola):
     print("\tFecha nueva:")
     fechaNueva = seleccionarFecha()
     mod = 0
+    print(f"\n\tTareas Modificadas:")
     for i in range(tamanio(listadoTareas)):
         t = crearTarea()
         tOriginal = recuperarTarea(listadoTareas, i)
@@ -248,7 +248,8 @@ def opcionActualizarPorLote(listadoTareas, cola):
             if verEstado(t) == "En Progreso":
                 modificarEncolado(cola, tOriginal, t)
             mod += 1
-    print(f'Se modificaron {mod} tarea/s')
+            print(f"\t\t{mod}. {verNombre(t)}: {RO}{verVencimiento(tOriginal)}{R} -> {VE}{verVencimiento(t)}{R}")
+    print(f'\n\tSe modificaron {BB}{VE}{mod}{R} tarea/s')
     input(CONTINUE_STRING)
 
 
