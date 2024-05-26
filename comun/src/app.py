@@ -23,16 +23,10 @@ import tadCola
 import datetime
 import os
 import sys
-from tadTarea import (crearTarea, cargarTarea, verNombre, verDescripcion,
-                      verAsignado, verEstado, verVencimiento, modNombre,
-                      modDescripcion, modAsignado, modEstado, modVencimiento,
-                      asignarTarea, sonIguales)
-from tadListado import (crearListado, agregarTarea, eliminarTarea,
-                        recuperarTarea, tamanio)
-from tadEmpleados import (crearEmpleados, agregarEmpleado, eliminarEmpleado,
-                          recuperarEmpleado, tamanio)
-from tadCola import (crearCola, colaEsVacia, encolar, desencolar, tamanioCola,
-                     copiarCola)
+from tadTarea import *
+from tadListado import * 
+from tadEmpleados import * 
+from tadCola import *
 from datetime import date
 from os import system, name
 
