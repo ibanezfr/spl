@@ -69,13 +69,12 @@ def main():
 
         match eleccion:
             case 1:
-                opcionAgregarTarea(listadoTareas,
-                                   listadoEmpleados,
+                opcionAgregarTarea(listadoTareas, listadoEmpleados,
                                    colaTareasEnProgreso)
             case 2:
-                opcionModificarTarea(listadoTareas, listadoEmpleados)
+                opcionModificarTarea(listadoTareas, listadoEmpleados, cola)
             case 3:
-                opcionEliminarTarea(listadoTareas)
+                opcionEliminarTarea(listadoTareas, cola)
             case 4:
                 opcionMostrarListadoCompleto(listadoTareas)
             case 5:
@@ -83,9 +82,8 @@ def main():
             case 6:
                 opcionReporteTareasPorEstado(listadoTareas)
             case 7:
-                opcionEliminarTareasEmpleado(listadoTareas,
-                                             listadoEmpleados,
-                                             colaTareasEnProgreso)
+                opcionEliminarTareasEmpleado(listadoTareas, listadoEmpleados,
+                                             colaTareasEnProgreso, cola)
             case 8:
                 opcionImprimirTareasEnProgreso(colaTareasEnProgreso)
             case 9:
@@ -158,7 +156,7 @@ def opcionAgregarTarea(listadoTareas, listadoEmpleados, cola):
         agregarEmpleado(listadoEmpleados, verAsignado(tarea))
 
 
-def opcionModificarTarea(listadoTareas, listadoEmpleados):
+def opcionModificarTarea(listadoTareas, listadoEmpleados, cola):
     if tamanio(listadoTareas) == 0:
         input(ERROR_EMPTY_STRING)
         return
@@ -189,7 +187,7 @@ def opcionModificarTarea(listadoTareas, listadoEmpleados):
     asignarTarea(tarea, tareaTemporal)
 
 
-def opcionEliminarTarea(listadoTareas):
+def opcionEliminarTarea(listadoTareas, cola):
     if tamanio(listadoTareas) == 0:
         input(ERROR_EMPTY_STRING)
         return
@@ -270,7 +268,8 @@ def opcionReporteTareasPorEstado(listadoTareas):
     imprimirSeccion(listadoCompleto, 3, "Completada")
 
 
-def opcionEliminarTareasEmpleado(listadoTareas, listadoEmpleados, colaTareasEnProgreso):
+def opcionEliminarTareasEmpleado(listadoTareas, listadoEmpleados,
+                                 colaTareasEnProgreso, cola):
     em = seleccionarEmpleado(listadoEmpleados)
     count = 0
     i = 0
