@@ -460,16 +460,16 @@ def imprimirCola(cola):
 def eliminarEncolado(cola, tarea):
     """Recibe una cola y una tarea como argumentos. Busca la tarea
     dentro de la cola y, si la encuentra, la elimina."""
-    aux = crearCola()
+    colaAux = crearCola()
     
     while tamanioCola(cola) != 0:
         tareaAux = desencolar(cola)
         if sonIguales(tarea, tareaAux):
             continue
         else:
-            encolar(aux, tareaAux)
+            encolar(colaAux, tareaAux)
 
-    cola = aux
+    cola = colaAux
 
 
 # 186 modificarEncolado(cola, tarea, tareaTemporal)
