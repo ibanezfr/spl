@@ -183,10 +183,10 @@ def opcionModificarTarea(listadoTareas, listadoEmpleados):
         break
     if verEstado(tarea) == "En Progreso":
         if verEstado(tareaTemporal) == "En Progreso":
-            #ModificarEncolado(tarea, tareaTemporal)
+            #modificarEncolado(cola, tarea, tareaTemporal)
             print("modifica cola")
         else:
-            #eliminarEncolado(tarea)
+            eliminarEncolado(cola, tarea)
             print("modifica cola")
     asignarTarea(tarea, tareaTemporal)
 
@@ -198,7 +198,7 @@ def opcionEliminarTarea(listadoTareas):
     tarea = seleccionarTarea(listadoTareas)
     eliminarTarea(listadoTareas, tarea)
     if verEstado(tarea) == "En Progreso":
-        #eliminarEncolado(tarea)
+        eliminarEncolado(cola, tarea)
         print("modifica cola")
 
 
@@ -281,7 +281,7 @@ def opcionEliminarTareasEmpleado(listadoTareas, listadoEmpleados, colaTareasEnPr
         if verAsignado(t) == em:
             eliminarTarea(listadoTareas, t)
             if verEstado(t) == "En Progreso":
-                #eliminarEncolado(t)
+                eliminarEncolado(cola, t)
                 print("modifica cola")
             count += 1
         else:
@@ -452,6 +452,28 @@ def imprimirCola(cola):
                 input(f"\n\t{AM}Restan {restantes} tarea/s, Enter para continuar...{R}")
             else:
                 input(CONTINUE_STRING)
+
+
+# 189 eliminarEncolado(tarea)
+# 201 eliminarEncolado(tarea)
+# 284 eliminarEncolado(t)
+def eliminarEncolado(cola, tarea):
+    """Recibe una cola y una tarea como argumentos. Busca la tarea
+    dentro de la cola y, si la encuentra, la elimina."""
+    aux = crearCola()
+    
+    while tamanioCola(cola) != 0:
+        tareaAux = desencolar(cola)
+        if sonIguales(tarea, tareaAux):
+            continue
+        else:
+            encolar(aux, tareaAux)
+
+    cola = aux
+
+
+# 186 modificarEncolado(cola, tarea, tareaTemporal)
+# 249 modificarEncolado(cola, t)
 
 
 # Carga de datos
