@@ -454,7 +454,7 @@ def imprimirCola(cola):
                 input(CONTINUE_STRING)
 
 
-
+# Carga de datos
 def cargarDatos(listadoTareas, listadoEmpleados, cola):
     input = []
     with open("testdata.dat", encoding="utf-8") as f:
