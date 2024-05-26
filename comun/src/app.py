@@ -79,7 +79,7 @@ def main():
             case 4:
                 opcionMostrarListadoCompleto(listadoTareas)
             case 5:
-                opcionActualizarPorLote(listadoTareas)
+                opcionActualizarPorLote(listadoTareas, cola)
             case 6:
                 opcionReporteTareasPorEstado(listadoTareas)
             case 7:
@@ -183,11 +183,9 @@ def opcionModificarTarea(listadoTareas, listadoEmpleados):
         break
     if verEstado(tarea) == "En Progreso":
         if verEstado(tareaTemporal) == "En Progreso":
-            #modificarEncolado(cola, tarea, tareaTemporal)
-            print("modifica cola")
+            modificarEncolado(cola, tarea, tareaTemporal)
         else:
             eliminarEncolado(cola, tarea)
-            print("modifica cola")
     asignarTarea(tarea, tareaTemporal)
 
 
@@ -227,7 +225,7 @@ def opcionMostrarListadoCompleto(listadoTareas):
             input(CONTINUE_STRING)
 
 
-def opcionActualizarPorLote(listadoTareas):
+def opcionActualizarPorLote(listadoTareas, cola):
     if tamanio(listadoTareas) == 0:
         input(ERROR_EMPTY_STRING)
         return
@@ -241,13 +239,13 @@ def opcionActualizarPorLote(listadoTareas):
     fechaNueva = seleccionarFecha()
     mod = 0
     for i in range(tamanio(listadoTareas)):
-        t = recuperarTarea(listadoTareas, i)
+        tOriginal = recuperarTarea(listadoTareas, i)
+        t = tOriginal
         d = date.fromisoformat(verVencimiento(t))
         if d >= fechaInicial and d <= fechaFinal:
             modVencimiento(t, fechaNueva)
             if verEstado(t) == "En Progreso":
-                #modificarEncolado(t)
-                print("modifica cola")
+                modificarEncolado(cola, tOriginal, t)
             mod += 1
     print(f'Se modificaron {mod} tarea/s')
     input(CONTINUE_STRING)
@@ -454,9 +452,6 @@ def imprimirCola(cola):
                 input(CONTINUE_STRING)
 
 
-# 189 eliminarEncolado(cola, tarea)
-# 201 eliminarEncolado(cola, tarea)
-# 284 eliminarEncolado(cola, t)
 def eliminarEncolado(cola, tarea):
     """Recibe una cola y una tarea como argumentos. Busca la tarea
     dentro de la cola y, si la encuentra, la elimina."""
@@ -472,9 +467,21 @@ def eliminarEncolado(cola, tarea):
     cola = colaAux
 
 
-# 186 modificarEncolado(cola, tarea, tareaTemporal)
-# 249 modificarEncolado(cola, t)
-def modificarEncolado(cola, tarea, tareaTemporal)
+def modificarEncolado(cola, tOriginal, tModificada):
+    """Recibe una cola, una tarea de referencia y una tarea modificada, busca
+    la tarea de referencia en la cola y, si la encuentra, la intercambia
+    por la tarea modificada"""
+    colaAux = crearCola()
+
+    while tamanioCola(cola) != 0:
+        tareaAux = desencolar(cola)
+        if sonIguales(tOriginal, tareaAux):
+            tareaAux = tModificada
+            encolar(colaAux, tareaAux)
+        else:
+            encolar(colaAux, tareaAux)
+
+    cola = colaAux
 
 
 # Carga de datos
