@@ -12,12 +12,13 @@ def crearEmpleados():
 
 
 def agregarEmpleado(empleados, e):
-    """Agrega un empleado al listado de empleados
+    """Agrega un empleado al listado de empleados si no existe
         Parametros:
             empleados (Empleados): Listado al cual agregarle el empleado
             e (str): Empleado a ser agregado
     """
-    empleados.append(e)
+    if e not in empleados:
+        empleados.append(e)
 
 
 def eliminarEmpleado(empleados, e):

@@ -7,7 +7,7 @@ Spec:
     Cola:
         queue of Tarea
 """
-
+from tadTarea import sonIguales
 
 def crearCola():
     """Crea una cola vacía"""
@@ -48,3 +48,36 @@ def copiarCola(cola1, cola2):
         elem = desencolar(aux)
         encolar(cola1, elem)
         encolar(cola2, elem)
+
+
+def eliminarEncolado(cola, tarea):
+    """Recibe una cola y una tarea como argumentos. Busca la tarea
+    dentro de la cola y, si la encuentra, la elimina."""
+    colaAux = crearCola()
+    
+    while tamanioCola(cola) != 0:
+        tareaAux = desencolar(cola)
+        if sonIguales(tarea, tareaAux):
+            continue
+        else:
+            encolar(colaAux, tareaAux)
+
+    copiarCola(cola, colaAux)
+
+
+def modificarEncolado(cola, tOriginal, tModificada):
+    """Recibe una cola, una tarea de referencia y una tarea modificada, busca
+    la tarea de referencia en la cola y, si la encuentra, la intercambia
+    por la tarea modificada"""
+    colaAux = crearCola()
+
+    while tamanioCola(cola) != 0:
+        tareaAux = desencolar(cola)
+        if sonIguales(tOriginal, tareaAux):
+            tareaAux = tModificada
+            encolar(colaAux, tareaAux)
+        else:
+            encolar(colaAux, tareaAux)
+
+    copiarCola(cola, colaAux)
+

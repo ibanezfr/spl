@@ -22,6 +22,7 @@ from tadEmpleados import *
 from tadCola import *
 from datetime import date
 from os import system, name
+from sys import *
 
 RO = "\033[91m" #Rojo
 VE = "\033[92m" #Verde
@@ -72,7 +73,7 @@ def main():
            case 6:
                 opcionReporteTareasPorEstado(listadoTareas)
            case 7:
-                opcionEliminarTareasEmpleado()
+                opcionEliminarTareasEmpleado(listadoTareas, listadoEmpleados, colaTareasEnProgreso)
            case 8:
                 opcionImprimirTareasEnProgreso(colaTareasEnProgreso)
            case 9:
@@ -104,7 +105,7 @@ def imprimir_menu():
     print(f"\n\t{BB}4{R}. Mostrar Listado Completo")
     print(f"\n\t{BB}5{R}. Actualizar Fechas de Vencimiento Por Lote")
     print(f"\n\t{BB}6{R}. Reporte de Tareas Agrupadas por Estado")
-    print(f"\n\t{BB}7{R}. Eliminar Tareas de un Empleado {AM}<WIP>{R}")
+    print(f"\n\t{BB}7{R}. Eliminar Tareas de un Empleado")
     print(f"\n\t{BB}8{R}. Imprimir Lista de Tareas En Progreso")
     if not _datosCargados: 
         print(f"\n\t{BB}9{R}. Cargar Datos de Prueba")
@@ -134,7 +135,7 @@ def opcionAgregarTarea(listadoTareas, listadoEmpleados, cola):
 
     agregarTarea(listadoTareas, tarea)
 
-    if tarea[3] == "En Progreso":
+    if verEstado(tarea) == "En Progreso":
         encolar(cola, tarea)
     
     if tamanio(listadoEmpleados) == 0:
@@ -163,6 +164,13 @@ def opcionModificarTarea(listadoTareas, listadoEmpleados):
         if r == "n":
             continue
         break
+    if verEstado(tarea) == "En Progreso":
+        if verEstado(tareaTemporal) == "En Progreso":
+            #modificarEncolado(tarea, tareaTemporal)
+            print("modifica cola")
+        else:
+            #eliminarEncolado(tarea)
+            print("modifica cola")
     asignarTarea(tarea, tareaTemporal)
 
 
@@ -172,6 +180,9 @@ def opcionEliminarTarea(listadoTareas):
         return
     tarea = seleccionarTarea(listadoTareas)
     eliminarTarea(listadoTareas, tarea)
+    if verEstado(tarea) == "En Progreso":
+        #eliminarEncolado(tarea)
+        print("modifica cola")
 
 
 def opcionMostrarListadoCompleto(listadoTareas):
@@ -203,6 +214,7 @@ def opcionActualizarPorLote(listadoTareas):
         input(ERROR_EMPTY_STRING)
         return
 
+#TODO: Mostrar lista de tareas modificadas (Nombre - Fecha original || Nombre Fecha nueva)
     print("\n\tFecha inical:")
     fechaInicial = date.fromisoformat(seleccionarFecha())
     print("\tFecha final:")
@@ -215,8 +227,11 @@ def opcionActualizarPorLote(listadoTareas):
         d = date.fromisoformat(verVencimiento(t))
         if d >= fechaInicial and d <= fechaFinal:
             modVencimiento(t, fechaNueva)
+            if verEstado(t) == "En Progreso":
+                #modificarEncolado(t)
+                print("modifica cola")
             mod += 1
-    print(f'Se modificaron {mod} tarea/s')
+    print(f'\n\t{AM}Se modificaron {mod} tarea/s{R}')
     input(CONTINUE_STRING)
 
 def opcionReporteTareasPorEstado(listadoTareas):
@@ -237,9 +252,20 @@ def opcionReporteTareasPorEstado(listadoTareas):
     imprimirSeccion(listadoProgreso, 3, "En Progreso")
     imprimirSeccion(listadoCompleto, 3, "Completada")
 
-#TODO
-def opcionEliminarTareasEmpleado():
-    print(f"\n\t{RO}Función no implementada <WIP>{R}")
+def opcionEliminarTareasEmpleado(listadoTareas, listadoEmpleados, cola):
+    em = seleccionarEmpleado(listadoEmpleados)
+    count = 0
+    i = 0
+    while i < tamanio(listadoTareas):
+        t = recuperarTarea(listadoTareas, i)
+        if verAsignado(t) == em:
+            eliminarTarea(listadoTareas, t)
+            #if verEstado(t) == "En Progreso":
+            #   eliminarEncolado(t)
+            count += 1
+        else:
+            i += 1
+    print(f"\n\t{AM}Se eliminaron {count} tarea/s{R}")
     input(CONTINUE_STRING)
 
 def opcionImprimirTareasEnProgreso(cola):
@@ -292,10 +318,10 @@ def inputTarea(listadoEmpleados):
 def seleccionarTarea(listadoTareas):
     tarea = crearTarea()
     for i in range(tamanio(listadoTareas)):
-        print(f'{i}. Nombre: {verNombre(recuperarTarea(listadoTareas, i))}')
+        print(f'\t\t{i}. Nombre: {verNombre(recuperarTarea(listadoTareas, i))}')
     while True:
         try:
-            cod = int(input("Ingrese el codigo de la tarea deseada: "))
+            cod = int(input(f"\tIngrese el codigo de la tarea deseada: "))
         except:
             print(ERROR_VALUE_STRING)
             continue
@@ -315,8 +341,8 @@ def seleccionarEmpleado(listadoEmpleados):
     while True:
         print("\n\tIngrese el código correspondiente al empleado a asignar")
         for i in range(tamanio(listadoEmpleados)):
-            print(f'{i}. {recuperarEmpleado(listadoEmpleados, i)}')
-        print(f'{str(tamanio(listadoEmpleados))}. Nuevo empleado')
+            print(f'\t\t{i}. {recuperarEmpleado(listadoEmpleados, i)}')
+        print(f'\t\t{str(tamanio(listadoEmpleados))}. Nuevo empleado')
         try:
             codEmpleado = int(input(f"\t {BB}>{R} "))
         except ValueError:

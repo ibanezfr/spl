@@ -10,12 +10,13 @@ def crearEmpleados():
     return empleados
 
 def agregarEmpleado(empleados, e):
-    """Agrega un empleado al listado de empleados
+    """Agrega un empleado al listado de empleados si no existe
         Parametros:
             empleados (Empleados): Listado al cual agregarle el empleado
             e (str): Empleado a ser agregado
     """
-    empleados.append(e)
+    if e not in empleados:
+        empleados.append(e)
 
 def eliminarEmpleado(empleados, e):
     """Elimina un empleado del listado de empleados
@@ -32,3 +33,4 @@ def recuperarEmpleado(empleados, i):
 def tamanio(empleados):
     """Retorna la cantidad de empleados en el listado"""
     return len(empleados)
+
