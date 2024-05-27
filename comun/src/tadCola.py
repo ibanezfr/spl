@@ -103,11 +103,11 @@ def eliminarEncolado(cola, tarea):
     """
     Elimina una tarea de una cola.
     
-        Parámetros:
+        Args:
             cola (list): La cola de tareas.
             tarea: La tarea a eliminar de la cola.
     
-        Devuelve:
+        Returns:
             list: La cola actualizada después de la eliminación.
     """
     colaAux = crearCola()
@@ -131,7 +131,7 @@ def modificarEncolado(cola, tOriginal, tModificada):
             tarea_referencia: La tarea de referencia a buscar en la cola.
             tarea_modificada: La tarea modificada que reemplazará a la tarea de referencia.
     
-        Devuelve:
+        Returns:
             list: La cola actualizada después del intercambio.
     """
     colaAux = crearCola()
