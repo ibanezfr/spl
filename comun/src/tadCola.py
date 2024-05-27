@@ -1,7 +1,7 @@
 # File:     tadCola.py
 # Author:   Ibañez F.
 # Date:     11 de Mayo de 2024
-# Modified:
+# Modified: 27/05/2024
 """
 Spec:
     Cola:
