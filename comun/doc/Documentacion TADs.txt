@@ -224,7 +224,7 @@ agregarTarea(listado, t):
 
         Args:
             listado: Listado al cual agregarle la tarea (list)
-            t: Tarea a ser agregada (list) Tarea
+            t: Tarea a ser agregada (list)
 
         Returns:
             None
