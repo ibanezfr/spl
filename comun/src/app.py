@@ -12,8 +12,6 @@
         - Reporte de tareas agrupadas por estado
         - Eliminar todas las tareas asignadas a un empleado especifico
         - Mostrar cola de tareas en progreso
-    Preguntas:
-    Cortar las fechas? Fecha mínima?
 """
 
 import tadTarea
@@ -180,13 +178,15 @@ def opcionModificarTarea(listadoTareas, listadoEmpleados, cola):
         if r == "n":
             continue
         break
+
+    asignarTarea(tarea, tareaTemporal)
+
     if verEstado(tarea) == "En Progreso" and verEstado(tareaTemporal) == "En Progreso":
         modificarEncolado(cola, tarea, tareaTemporal)
     elif verEstado(tarea) == "En Progreso":
         eliminarEncolado(cola, tarea)
     elif verEstado(tareaTemporal) == "En Progreso":
         encolar(cola, tareaTemporal)
-    asignarTarea(tarea, tareaTemporal)
 
 
 def opcionEliminarTarea(listadoTareas, cola):
@@ -197,7 +197,6 @@ def opcionEliminarTarea(listadoTareas, cola):
     eliminarTarea(listadoTareas, tarea)
     if verEstado(tarea) == "En Progreso":
         eliminarEncolado(cola, tarea)
-        print("modifica cola")
 
 
 def opcionMostrarListadoCompleto(listadoTareas):
@@ -239,9 +238,9 @@ def opcionActualizarPorLote(listadoTareas, cola):
     mod = 0
     print(f"\n\tTareas Modificadas:")
     for i in range(tamanio(listadoTareas)):
-        t = crearTarea()
-        tOriginal = recuperarTarea(listadoTareas, i)
-        asignarTarea(t, tOriginal)
+        tOriginal = crearTarea()
+        t = recuperarTarea(listadoTareas, i)
+        asignarTarea(tOriginal, t)
         d = date.fromisoformat(verVencimiento(t))
         if d >= fechaInicial and d <= fechaFinal:
             modVencimiento(t, fechaNueva)
@@ -453,6 +452,53 @@ def imprimirCola(cola):
             else:
                 input(CONTINUE_STRING)
  
+def eliminarEncolado(cola, tarea):
+    """
+    Elimina una tarea de una cola.
+    
+        Args:
+            cola (list): La cola de tareas.
+            tarea: La tarea a eliminar de la cola.
+    
+        Returns:
+            list: La cola actualizada después de la eliminación.
+    """
+    colaAux = crearCola()
+    
+    while tamanioCola(cola) != 0:
+        tareaAux = desencolar(cola)
+        if sonIguales(tarea, tareaAux):
+            continue
+        else:
+            encolar(colaAux, tareaAux)
+
+    copiarCola(cola, colaAux)
+
+
+def modificarEncolado(cola, tOriginal, tModificada):
+    """
+    Intercambia una tarea de referencia por una tarea modificada en una cola.
+    
+        Args:
+            cola (list): La cola de tareas.
+            tarea_referencia: La tarea de referencia a buscar en la cola.
+            tarea_modificada: La tarea modificada que reemplazará a la tarea de referencia.
+    
+        Returns:
+            list: La cola actualizada después del intercambio.
+    """
+    colaAux = crearCola()
+
+    while tamanioCola(cola) != 0:
+        tareaAux = desencolar(cola)
+        if sonIguales(tOriginal, tareaAux):
+            tareaAux = tModificada
+            encolar(colaAux, tareaAux)
+        else:
+            encolar(colaAux, tareaAux)
+
+    copiarCola(cola, colaAux)
+
  
 # Carga de datos
 def cargarDatos(listadoTareas, listadoEmpleados, cola):
@@ -461,12 +507,15 @@ def cargarDatos(listadoTareas, listadoEmpleados, cola):
         for line in f:
             input.append(line.rstrip())
     for i in range(0, len(input), 5):
-        t = crearTarea()
-        cargarTarea(t, input[i], input[i+1], input[i+2], input[i+3], input[i+4])
-        agregarEmpleado(listadoEmpleados, verAsignado(t))
-        agregarTarea(listadoTareas, t)
-        if verEstado(t) == "En Progreso":
-            encolar(cola, t)
+        try:
+            t = crearTarea()
+            cargarTarea(t, input[i], input[i+1], input[i+2], input[i+3], input[i+4])
+            agregarEmpleado(listadoEmpleados, verAsignado(t))
+            agregarTarea(listadoTareas, t)
+            if verEstado(t) == "En Progreso":
+                encolar(cola, t)
+        except IndexError:
+            break
 
 
 if __name__ == '__main__':

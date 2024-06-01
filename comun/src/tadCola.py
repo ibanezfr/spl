@@ -8,7 +8,6 @@ Spec:
         queue of Tarea
 """
 
-
 def crearCola():
     """
     Crea una cola vacía
@@ -98,51 +97,4 @@ def copiarCola(cola1, cola2):
         elem = desencolar(aux)
         encolar(cola1, elem)
         encolar(cola2, elem)
-
-def eliminarEncolado(cola, tarea):
-    """
-    Elimina una tarea de una cola.
-    
-        Args:
-            cola (list): La cola de tareas.
-            tarea: La tarea a eliminar de la cola.
-    
-        Returns:
-            list: La cola actualizada después de la eliminación.
-    """
-    colaAux = crearCola()
-    
-    while tamanioCola(cola) != 0:
-        tareaAux = desencolar(cola)
-        if sonIguales(tarea, tareaAux):
-            continue
-        else:
-            encolar(colaAux, tareaAux)
-
-    copiarCola(cola, colaAux)
-
-
-def modificarEncolado(cola, tOriginal, tModificada):
-    """
-    Intercambia una tarea de referencia por una tarea modificada en una cola.
-    
-        Args:
-            cola (list): La cola de tareas.
-            tarea_referencia: La tarea de referencia a buscar en la cola.
-            tarea_modificada: La tarea modificada que reemplazará a la tarea de referencia.
-    
-        Returns:
-            list: La cola actualizada después del intercambio.
-    """
-    colaAux = crearCola()
-
-    while tamanioCola(cola) != 0:
-        tareaAux = desencolar(cola)
-        if sonIguales(tOriginal, tareaAux):
-            tareaAux = tModificada
-            encolar(colaAux, tareaAux)
-        else:
-            encolar(colaAux, tareaAux)
-
-    copiarCola(cola, colaAux)
 
